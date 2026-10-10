@@ -1,0 +1,7 @@
+dist
+node_modules
+coverage
+study-notes
+docs/DECISIONS_LOG.md
+package-lock.json
+*.pdf
