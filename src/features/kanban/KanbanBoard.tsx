@@ -9,7 +9,15 @@ import { KanbanColumn } from './KanbanColumn';
 import { TaskCard } from './TaskCard';
 import { useKanbanDnd } from './useKanbanDnd';
 
-export const KanbanBoard: React.FC = () => {
+export interface KanbanBoardProps {
+  onOpenTask?: (taskId: string) => void;
+  onOpenCreateTask?: (statusId: string) => void;
+}
+
+export const KanbanBoard: React.FC<KanbanBoardProps> = ({
+  onOpenTask,
+  onOpenCreateTask,
+}) => {
   const state = useFlowboardStore();
   const selectedListId = useFlowboardStore((s) => s.selectedListId);
   const canEdit = selectCanEditCurrentList(state);
@@ -54,6 +62,8 @@ export const KanbanBoard: React.FC = () => {
             column={column}
             listId={selectedListId}
             canEdit={canEdit}
+            onOpenTask={onOpenTask}
+            onOpenCreateTask={onOpenCreateTask}
           />
         ))}
       </div>

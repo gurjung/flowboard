@@ -7,6 +7,7 @@ import {
 import { useListSelectionLoading } from '@/components/main-area/useListSelectionLoading';
 import { KanbanBoard } from '@/features/kanban';
 import { ListView } from '@/features/list-view';
+import { TaskDrawer } from '@/features/task-drawer';
 import { ViewSwitcher, ActiveView } from './ViewSwitcher';
 import { AccessDeniedScreen } from './AccessDeniedScreen';
 import { Inbox, ListFilter } from 'lucide-react';
@@ -14,10 +15,21 @@ import { Inbox, ListFilter } from 'lucide-react';
 export const MainArea: React.FC = () => {
   const state = useFlowboardStore();
   const selectedListId = useFlowboardStore((s) => s.selectedListId);
+  const currentUserId = useFlowboardStore((s) => s.currentUserId);
   const [view, setView] = useState<ActiveView>('kanban');
+  const [drawerState, setDrawerState] = useState<{
+    mode: 'create' | 'edit';
+    taskId?: string;
+    statusId?: string;
+  } | null>(null);
   const currentListResult = selectCurrentList(state);
   const isLoading = useListSelectionLoading(selectedListId, 150);
   const canEdit = selectCanEditCurrentList(state);
+
+  // Clear drawer on ANY current-user change or list change (D-055)
+  React.useEffect(() => {
+    setDrawerState(null);
+  }, [selectedListId, currentUserId]);
 
   // 1. Neutral empty state when selectedListId is null
   if (selectedListId === null) {
@@ -98,11 +110,36 @@ export const MainArea: React.FC = () => {
       {/* Kanban or List View */}
       <section className="mt-4 flex flex-1 flex-col overflow-hidden min-h-0 min-w-0">
         {view === 'kanban' ? (
-          <KanbanBoard />
+          <KanbanBoard
+            onOpenTask={(id) => setDrawerState({ mode: 'edit', taskId: id })}
+            onOpenCreateTask={(statusId) =>
+              setDrawerState({ mode: 'create', statusId })
+            }
+          />
         ) : (
-          <ListView listId={list.id} canEdit={canEdit} key={list.id} />
+          <ListView
+            listId={list.id}
+            canEdit={canEdit}
+            key={list.id}
+            onOpenTask={(id) => setDrawerState({ mode: 'edit', taskId: id })}
+            onOpenCreateTask={(statusId) =>
+              setDrawerState({ mode: 'create', statusId })
+            }
+          />
         )}
       </section>
+
+      {/* Task Detail / Creation Drawer (F10) */}
+      <TaskDrawer
+        taskId={
+          drawerState?.mode === 'edit' ? (drawerState.taskId ?? null) : null
+        }
+        initialListId={list.id}
+        initialStatusId={drawerState?.statusId}
+        isOpen={drawerState !== null}
+        canEdit={canEdit}
+        onClose={() => setDrawerState(null)}
+      />
 
       {/* Task & Scaffold Verification Canvas (Preserved for F0 test compatibility) */}
       <section className="sr-only" aria-hidden="true">

@@ -455,3 +455,4 @@ export {
 } from './kanbanSelectors';
 
 export { sortTasksForListView, nextSort, PRIORITY_RANK } from './taskSorting';
+export { selectAssignableUsersForList } from './assigneeSelectors';

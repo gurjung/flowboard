@@ -9,24 +9,29 @@ import {
 } from '@/domain/taskSorting';
 import { TaskTableHeader } from './TaskTableHeader';
 import { TaskTableRow } from './TaskTableRow';
-import { QuickTaskInput } from '@/components/tasks';
+import { QuickTaskInput, DeleteTaskDialog } from '@/components/tasks';
+import { useToast } from '@/components/toasts';
 import { Plus } from 'lucide-react';
-import { Status } from '@/domain/types';
+import { Status, Task } from '@/domain/types';
 
 export interface ListViewProps {
   listId: string;
   canEdit?: boolean;
   onOpenTask?: (taskId: string) => void;
+  onOpenCreateTask?: (statusId?: string) => void;
 }
 
 export const ListView: React.FC<ListViewProps> = ({
   listId,
   canEdit = true,
   onOpenTask,
+  onOpenCreateTask,
 }) => {
   const state = useFlowboardStore();
+  const toast = useToast();
   const [sortConfig, setSortConfig] = useState<SortConfig | null>(null);
   const [isAdding, setIsAdding] = useState(false);
+  const [taskToDelete, setTaskToDelete] = useState<Task | null>(null);
 
   const tasksRes = selectTasksForList(state, listId);
   const statusesRes = selectStatusesForList(state, listId);
@@ -40,7 +45,7 @@ export const ListView: React.FC<ListViewProps> = ({
     }, {});
   }, [statusesRes]);
 
-  // Default todo status for inline task creation
+  // Default todo status for task creation
   const defaultTodoStatus = useMemo(() => {
     const list = statusesRes.success ? statusesRes.data : [];
     const todoStatuses = list.filter((s) => s.category === 'todo');
@@ -55,6 +60,14 @@ export const ListView: React.FC<ListViewProps> = ({
 
   const handleSortChange = (key: SortKey) => {
     setSortConfig((prev) => nextSort(prev, key));
+  };
+
+  const handleAddClick = () => {
+    if (onOpenCreateTask) {
+      onOpenCreateTask(defaultTodoStatus?.id);
+    } else {
+      setIsAdding(true);
+    }
   };
 
   return (
@@ -78,7 +91,9 @@ export const ListView: React.FC<ListViewProps> = ({
                 key={task.id}
                 task={task}
                 status={statusesRecord[task.statusId]}
+                canEdit={canEdit}
                 onOpenTask={onOpenTask}
+                onDeleteTask={() => setTaskToDelete(task)}
               />
             ))}
           </tbody>
@@ -95,10 +110,10 @@ export const ListView: React.FC<ListViewProps> = ({
         )}
       </div>
 
-      {/* Inline Quick Add Footer (F9 Gate 6) */}
+      {/* Task Creation Trigger */}
       {canEdit && defaultTodoStatus && (
         <div className="mt-3 shrink-0">
-          {isAdding ? (
+          {isAdding && !onOpenCreateTask ? (
             <QuickTaskInput
               listId={listId}
               statusId={defaultTodoStatus.id}
@@ -107,7 +122,7 @@ export const ListView: React.FC<ListViewProps> = ({
           ) : (
             <button
               type="button"
-              onClick={() => setIsAdding(true)}
+              onClick={handleAddClick}
               data-testid="list-add-task-btn"
               className="inline-flex items-center gap-1.5 rounded-card border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 shadow-subtle hover:bg-slate-50 hover:text-slate-900 transition-colors"
             >
@@ -117,6 +132,22 @@ export const ListView: React.FC<ListViewProps> = ({
           )}
         </div>
       )}
+
+      {/* Delete Task Warning/Confirmation Modal */}
+      <DeleteTaskDialog
+        isOpen={taskToDelete !== null}
+        taskTitle={taskToDelete?.title ?? ''}
+        onClose={() => setTaskToDelete(null)}
+        onConfirm={async () => {
+          if (!taskToDelete) return;
+          const res = await state.deleteTask(taskToDelete.id);
+          if (res.success) {
+            toast.success('Task deleted');
+          } else {
+            toast.error(res.error.message);
+          }
+        }}
+      />
     </div>
   );
 };

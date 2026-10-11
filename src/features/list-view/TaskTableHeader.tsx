@@ -63,9 +63,16 @@ export const TaskTableHeader: React.FC<TaskTableHeaderProps> = ({
         <th
           scope="col"
           data-testid="th-assignees"
-          className="py-3 pl-3 pr-4 w-28"
+          className="py-3 pl-3 pr-3 w-28"
         >
           Assignees
+        </th>
+        <th
+          scope="col"
+          data-testid="th-actions"
+          className="py-3 pl-2 pr-4 w-12 text-right"
+        >
+          <span className="sr-only">Actions</span>
         </th>
       </tr>
     </thead>

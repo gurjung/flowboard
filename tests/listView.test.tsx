@@ -85,7 +85,7 @@ describe('ListView & ViewSwitcher component tests (F9)', () => {
       expect(priorityTh).toHaveAttribute('aria-sort', 'none');
     });
 
-    it('renders task row details and invokes onOpenTask on title button click', () => {
+    it('does NOT call onOpenTask on row title click; opens when clicking 3-dots Edit action', () => {
       const handleOpen = vi.fn();
       render(
         <ToastProvider>
@@ -93,13 +93,19 @@ describe('ListView & ViewSwitcher component tests (F9)', () => {
         </ToastProvider>
       );
 
-      // task-1 title button
-      const task1Btn = screen.getByRole('button', {
-        name: /Implement token refresh rotation flow/i,
-      });
-      expect(task1Btn).toBeInTheDocument();
+      // Title is rendered as text, not as a button opening the modal
+      const task1Title = screen.getByText(
+        'Implement token refresh rotation flow'
+      );
+      expect(task1Title).toBeInTheDocument();
+      fireEvent.click(task1Title);
+      expect(handleOpen).not.toHaveBeenCalled();
 
-      fireEvent.click(task1Btn);
+      // Open 3 dots menu and click Edit
+      const actionBtn = screen.getByTestId('task-actions-task-1');
+      fireEvent.click(actionBtn);
+      const editBtn = screen.getByRole('menuitem', { name: /edit/i });
+      fireEvent.click(editBtn);
       expect(handleOpen).toHaveBeenCalledWith('task-1');
     });
 

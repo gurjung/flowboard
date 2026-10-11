@@ -1,4 +1,5 @@
 import React from 'react';
+import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/react';
 import { Task, Status } from '@/domain/types';
 import { formatDueDate } from '@/domain/dueDate';
 import {
@@ -6,18 +7,28 @@ import {
   StatusBadge,
   UserAvatarGroup,
 } from '@/components/tasks';
-import { Calendar, AlertCircle } from 'lucide-react';
+import {
+  Calendar,
+  AlertCircle,
+  MoreHorizontal,
+  Edit,
+  Trash2,
+} from 'lucide-react';
 
 export interface TaskTableRowProps {
   task: Task;
   status?: Status | null;
+  canEdit?: boolean;
   onOpenTask?: (taskId: string) => void;
+  onDeleteTask?: (taskId: string) => void;
 }
 
 export const TaskTableRow: React.FC<TaskTableRowProps> = ({
   task,
   status,
+  canEdit = true,
   onOpenTask,
+  onDeleteTask,
 }) => {
   const formattedDue = formatDueDate(task.dueDate, status?.category ?? 'todo');
 
@@ -28,13 +39,12 @@ export const TaskTableRow: React.FC<TaskTableRowProps> = ({
     >
       {/* Title */}
       <td className="py-2.5 pl-4 pr-3 max-w-xs sm:max-w-md">
-        <button
-          type="button"
-          onClick={() => onOpenTask?.(task.id)}
-          className="w-full text-left font-medium text-slate-900 text-xs truncate hover:text-brand-600 focus:outline-none focus-visible:ring-1 focus-visible:ring-brand-500 rounded"
+        <span
+          data-testid={`task-row-title-${task.id}`}
+          className="block font-medium text-slate-900 text-xs truncate"
         >
           {task.title}
-        </button>
+        </span>
       </td>
 
       {/* Status */}
@@ -68,8 +78,53 @@ export const TaskTableRow: React.FC<TaskTableRowProps> = ({
       </td>
 
       {/* Assignees */}
-      <td className="py-2.5 pl-3 pr-4 whitespace-nowrap">
+      <td className="py-2.5 pl-3 pr-3 whitespace-nowrap">
         <UserAvatarGroup assigneeIds={task.assigneeIds} />
+      </td>
+
+      {/* Actions */}
+      <td className="py-2.5 pl-2 pr-4 text-right whitespace-nowrap w-12">
+        {canEdit && (
+          <Menu as="div" className="relative inline-block text-left">
+            <MenuButton
+              data-testid={`task-actions-${task.id}`}
+              className="rounded p-1 text-slate-400 hover:text-slate-600 hover:bg-slate-100 focus:outline-hidden"
+              aria-label="Task actions"
+            >
+              <MoreHorizontal className="h-4 w-4" />
+            </MenuButton>
+            <MenuItems className="absolute right-0 z-20 mt-1 w-32 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black/5 focus:outline-hidden">
+              <MenuItem>
+                {({ focus }) => (
+                  <button
+                    type="button"
+                    onClick={() => onOpenTask?.(task.id)}
+                    className={`flex w-full items-center gap-2 px-3 py-1.5 text-xs text-slate-700 ${
+                      focus ? 'bg-slate-100' : ''
+                    }`}
+                  >
+                    <Edit className="h-3.5 w-3.5 text-slate-500" />
+                    Edit
+                  </button>
+                )}
+              </MenuItem>
+              <MenuItem>
+                {({ focus }) => (
+                  <button
+                    type="button"
+                    onClick={() => onDeleteTask?.(task.id)}
+                    className={`flex w-full items-center gap-2 px-3 py-1.5 text-xs text-rose-600 ${
+                      focus ? 'bg-rose-50' : ''
+                    }`}
+                  >
+                    <Trash2 className="h-3.5 w-3.5 text-rose-500" />
+                    Delete
+                  </button>
+                )}
+              </MenuItem>
+            </MenuItems>
+          </Menu>
+        )}
       </td>
     </tr>
   );

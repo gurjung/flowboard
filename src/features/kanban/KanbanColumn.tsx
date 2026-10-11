@@ -15,12 +15,16 @@ export interface KanbanColumnProps {
   column: KanbanColumnData;
   listId: string;
   canEdit?: boolean;
+  onOpenTask?: (taskId: string) => void;
+  onOpenCreateTask?: (statusId: string) => void;
 }
 
 export const KanbanColumn: React.FC<KanbanColumnProps> = ({
   column,
   listId,
   canEdit = true,
+  onOpenTask,
+  onOpenCreateTask,
 }) => {
   const [isCreating, setIsCreating] = useState(false);
   const { status, tasks } = column;
@@ -76,6 +80,7 @@ export const KanbanColumn: React.FC<KanbanColumnProps> = ({
               task={task}
               statusCategory={status.category}
               canEdit={canEdit}
+              onOpenTask={onOpenTask}
             />
           ))}
         </SortableContext>
@@ -103,7 +108,13 @@ export const KanbanColumn: React.FC<KanbanColumnProps> = ({
         <div className="shrink-0 pt-2">
           <button
             type="button"
-            onClick={() => setIsCreating(true)}
+            onClick={() => {
+              if (onOpenCreateTask) {
+                onOpenCreateTask(status.id);
+              } else {
+                setIsCreating(true);
+              }
+            }}
             data-testid={`add-task-btn-${status.id}`}
             className="flex w-full items-center justify-center gap-1.5 rounded-card border border-transparent py-1.5 text-xs font-medium text-slate-600 hover:border-slate-200 hover:bg-white hover:text-slate-900 transition-colors"
           >

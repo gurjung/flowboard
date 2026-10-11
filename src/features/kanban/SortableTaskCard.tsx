@@ -8,12 +8,14 @@ export interface SortableTaskCardProps {
   task: Task;
   statusCategory: StatusCategory;
   canEdit?: boolean;
+  onOpenTask?: (taskId: string) => void;
 }
 
 export const SortableTaskCard: React.FC<SortableTaskCardProps> = ({
   task,
   statusCategory,
   canEdit = true,
+  onOpenTask,
 }) => {
   const {
     attributes,
@@ -51,6 +53,7 @@ export const SortableTaskCard: React.FC<SortableTaskCardProps> = ({
         statusCategory={statusCategory}
         isDragging={isDragging}
         canEdit={canEdit}
+        onOpenTask={onOpenTask}
       />
     </div>
   );

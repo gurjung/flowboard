@@ -6,6 +6,9 @@ import {
   PRIORITY_RANK,
 } from '@/domain/taskSorting';
 import { Status, Task } from '@/domain/types';
+import { createSeedState } from '@/domain/fixtures';
+import { selectKanbanColumns } from '@/domain/kanbanSelectors';
+import { FlowboardStoreState } from '@/store/types';
 
 function createMockStatus(id: string, position: number): Status {
   return {
@@ -122,6 +125,26 @@ describe('taskSorting domain logic (D-053)', () => {
     // Original frozen array length & items remain untouched
     expect(frozenTasks[0]?.id).toBe('task-1');
     expect(frozenTasks[1]?.id).toBe('task-2');
+  });
+
+  it('Kanban order unchanged after List sort', () => {
+    const state = createSeedState() as unknown as FlowboardStoreState;
+    const initialColumns = selectKanbanColumns(state, 'list-1');
+    const tasksInList = Object.values(state.tasks).filter(
+      (t) => t.primaryListId === 'list-1' && !t.archivedAt
+    );
+
+    // Sort list view by priority
+    const sorted = sortTasksForListView(
+      tasksInList,
+      { key: 'priority', direction: 'asc' },
+      state.statuses
+    );
+    expect(sorted.length).toBeGreaterThan(0);
+
+    // Kanban order remains identical to initial order
+    const postColumns = selectKanbanColumns(state, 'list-1');
+    expect(postColumns).toEqual(initialColumns);
   });
 
   describe('Priority sorting', () => {

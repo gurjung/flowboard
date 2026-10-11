@@ -1,0 +1,164 @@
+import React, { useState } from 'react';
+import { Trash2, AlertTriangle } from 'lucide-react';
+
+interface TaskDrawerFooterProps {
+  mode: 'create' | 'edit';
+  canEdit: boolean;
+  createdAt?: string;
+  taskTitle?: string;
+  isSaving: boolean;
+  onSave: () => void;
+  onCancel: () => void;
+  onDelete?: () => Promise<boolean>;
+}
+
+export const TaskDrawerFooter: React.FC<TaskDrawerFooterProps> = ({
+  mode,
+  canEdit,
+  createdAt,
+  taskTitle,
+  isSaving,
+  onSave,
+  onCancel,
+  onDelete,
+}) => {
+  const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const formatTimestamp = (isoString?: string) => {
+    if (!isoString) return '';
+    try {
+      const d = new Date(isoString);
+      return d.toLocaleDateString(undefined, {
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+      });
+    } catch {
+      return isoString;
+    }
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!onDelete) return;
+    setIsDeleting(true);
+    setDeleteError(null);
+    try {
+      const success = await onDelete();
+      if (!success) {
+        setDeleteError('Failed to delete task. Please try again.');
+      }
+    } catch {
+      setDeleteError('An unexpected error occurred while deleting.');
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  if (!canEdit) {
+    return (
+      <div className="border-t border-slate-200 bg-slate-50 px-6 py-3 flex justify-end">
+        <button
+          type="button"
+          onClick={onCancel}
+          className="rounded-md border border-slate-300 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-50"
+        >
+          Close
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="border-t border-slate-200 bg-slate-50 px-6 py-3.5">
+      {isConfirmingDelete ? (
+        <div
+          data-testid="drawer-delete-confirm-panel"
+          className="rounded-lg border border-rose-200 bg-rose-50 p-3 space-y-2.5"
+        >
+          <div className="flex items-start gap-2">
+            <AlertTriangle className="h-4 w-4 text-rose-600 shrink-0 mt-0.5" />
+            <div className="text-xs text-rose-800">
+              <p className="font-semibold mb-0.5">Delete this task?</p>
+              <p className="text-slate-600 truncate max-w-[18rem]">
+                &quot;{taskTitle}&quot;
+              </p>
+            </div>
+          </div>
+
+          {deleteError && (
+            <p className="text-xs text-rose-700 font-medium">{deleteError}</p>
+          )}
+
+          <div className="flex items-center justify-end gap-2 pt-1">
+            <button
+              type="button"
+              onClick={() => {
+                setIsConfirmingDelete(false);
+                setDeleteError(null);
+              }}
+              disabled={isDeleting}
+              className="rounded-md border border-slate-300 bg-white px-2.5 py-1 text-xs font-medium text-slate-700 hover:bg-slate-50"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              data-testid="drawer-confirm-delete-btn"
+              onClick={handleConfirmDelete}
+              disabled={isDeleting}
+              className="rounded-md bg-rose-600 px-2.5 py-1 text-xs font-medium text-white shadow-xs hover:bg-rose-700 disabled:opacity-50"
+            >
+              {isDeleting ? 'Deleting...' : 'Delete'}
+            </button>
+          </div>
+        </div>
+      ) : (
+        <div className="flex items-center justify-between gap-3">
+          {mode === 'edit' && onDelete ? (
+            <button
+              type="button"
+              data-testid="drawer-delete-btn"
+              onClick={() => setIsConfirmingDelete(true)}
+              className="inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs font-medium text-rose-600 hover:bg-rose-50 hover:text-rose-700"
+            >
+              <Trash2 className="h-3.5 w-3.5" />
+              Delete task
+            </button>
+          ) : (
+            <div className="text-[11px] text-slate-400">
+              {createdAt && `Created ${formatTimestamp(createdAt)}`}
+            </div>
+          )}
+
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              data-testid="drawer-cancel-btn"
+              onClick={onCancel}
+              disabled={isSaving}
+              className="rounded-md border border-slate-300 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 shadow-xs hover:bg-slate-50"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              data-testid="drawer-save-btn"
+              onClick={onSave}
+              disabled={isSaving}
+              className="rounded-md bg-indigo-600 px-3.5 py-1.5 text-xs font-semibold text-white shadow-xs hover:bg-indigo-700 disabled:opacity-50"
+            >
+              {isSaving
+                ? 'Saving...'
+                : mode === 'create'
+                  ? 'Create Task'
+                  : 'Save changes'}
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};

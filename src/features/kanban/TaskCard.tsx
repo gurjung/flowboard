@@ -9,6 +9,7 @@ export interface TaskCardProps {
   statusCategory: StatusCategory;
   isDragging?: boolean;
   canEdit?: boolean;
+  onOpenTask?: (taskId: string) => void;
 }
 
 export const TaskCard: React.FC<TaskCardProps> = ({
@@ -16,14 +17,41 @@ export const TaskCard: React.FC<TaskCardProps> = ({
   statusCategory,
   isDragging = false,
   canEdit = true,
+  onOpenTask,
 }) => {
   const formattedDue = formatDueDate(task.dueDate, statusCategory);
+  const pointerDownPos = React.useRef<{ x: number; y: number } | null>(null);
+
+  const handlePointerDown = (e: React.PointerEvent) => {
+    pointerDownPos.current = { x: e.clientX, y: e.clientY };
+  };
+
+  const handleClick = (e: React.MouseEvent) => {
+    if (pointerDownPos.current) {
+      const dx = Math.abs(e.clientX - pointerDownPos.current.x);
+      const dy = Math.abs(e.clientY - pointerDownPos.current.y);
+      if (dx > 5 || dy > 5) {
+        return; // drag move completed, don't open drawer
+      }
+    }
+    onOpenTask?.(task.id);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      onOpenTask?.(task.id);
+    }
+  };
 
   return (
     <article
       data-testid={`task-card-${task.id}`}
       tabIndex={0}
       aria-label={`Task: ${task.title}`}
+      onPointerDown={handlePointerDown}
+      onClick={handleClick}
+      onKeyDown={handleKeyDown}
       className={`group relative rounded-card border bg-white p-3.5 shadow-card transition-all ${
         isDragging
           ? 'rotate-1 border-brand-500 shadow-xl opacity-90'
