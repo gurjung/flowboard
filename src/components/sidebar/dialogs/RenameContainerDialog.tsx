@@ -1,0 +1,106 @@
+import React, { useState, useEffect, useRef } from 'react';
+import { useFlowboardStore } from '@/store/useFlowboardStore';
+import { BaseContainer } from '@/domain/types';
+import { Modal } from '@/components/common';
+
+interface RenameModalProps {
+  node: BaseContainer;
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+export const RenameContainerDialog: React.FC<RenameModalProps> = ({
+  node,
+  isOpen,
+  onClose,
+}) => {
+  const currentUserId = useFlowboardStore((s) => s.currentUserId);
+  const renameContainer = useFlowboardStore((s) => s.renameContainer);
+
+  const [name, setName] = useState(node.name);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const isMountedRef = useRef(true);
+
+  useEffect(() => {
+    isMountedRef.current = true;
+    setName(node.name);
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, [node]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setErrorMsg(null);
+    setIsSubmitting(true);
+
+    const callUserId = currentUserId;
+    const result = await renameContainer(node.id, name);
+
+    if (
+      !isMountedRef.current ||
+      callUserId !== useFlowboardStore.getState().currentUserId
+    ) {
+      return;
+    }
+
+    setIsSubmitting(false);
+
+    if (result.success) {
+      onClose();
+    } else {
+      setErrorMsg(result.error.message);
+    }
+  };
+
+  return (
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      title="Rename Container"
+      testId="rename-container-dialog"
+      errorMsg={errorMsg}
+    >
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <label
+            htmlFor="rename-name"
+            className="block text-xs font-medium text-slate-700"
+          >
+            New Name
+          </label>
+          <input
+            id="rename-name"
+            data-testid="rename-name-input"
+            type="text"
+            required
+            autoFocus
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="mt-1 w-full rounded border border-slate-300 px-3 py-1.5 text-xs text-slate-800 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+          />
+        </div>
+
+        <div className="flex justify-end gap-2 pt-2">
+          <button
+            type="button"
+            onClick={onClose}
+            className="rounded border border-slate-300 px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-50"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            data-testid="rename-submit-btn"
+            className="rounded bg-indigo-600 px-3 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-indigo-700 disabled:opacity-50"
+          >
+            {isSubmitting ? 'Saving...' : 'Save Name'}
+          </button>
+        </div>
+      </form>
+    </Modal>
+  );
+};
