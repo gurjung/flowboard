@@ -4,6 +4,8 @@ import {
   Folder,
   List,
   Status,
+  StatusCategory,
+  StatusColorToken,
   Task,
   User,
   Grant,
@@ -108,6 +110,38 @@ export interface TaskAsyncSlice {
   deleteTask: (id: string) => Promise<Result<void>>;
 }
 
+export interface CreateStatusInput {
+  listId: string;
+  name: string;
+  category: StatusCategory;
+  color?: StatusColorToken;
+}
+
+export interface UpdateStatusPatch {
+  name?: string;
+  color?: StatusColorToken;
+}
+
+export interface StatusSyncSlice {
+  createStatusSync: (input: CreateStatusInput) => Result<Status>;
+  updateStatusSync: (id: string, patch: UpdateStatusPatch) => Result<Status>;
+  reorderStatusSync: (id: string, newIndex: number) => Result<Status>;
+  deleteStatusSync: (id: string, fallbackStatusId?: string) => Result<void>;
+}
+
+export interface StatusAsyncSlice {
+  createStatus: (input: CreateStatusInput) => Promise<Result<Status>>;
+  updateStatus: (
+    id: string,
+    patch: UpdateStatusPatch
+  ) => Promise<Result<Status>>;
+  reorderStatus: (id: string, newIndex: number) => Promise<Result<Status>>;
+  deleteStatus: (
+    id: string,
+    fallbackStatusId?: string
+  ) => Promise<Result<void>>;
+}
+
 export interface FlowboardStoreState
   extends
     FlowboardDataState,
@@ -115,7 +149,9 @@ export interface FlowboardStoreState
     ContainerSyncSlice,
     ContainerAsyncSlice,
     TaskSyncSlice,
-    TaskAsyncSlice {}
+    TaskAsyncSlice,
+    StatusSyncSlice,
+    StatusAsyncSlice {}
 
 export type SetStoreState = (
   fn: (state: FlowboardStoreState) => Partial<FlowboardStoreState>

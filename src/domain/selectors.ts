@@ -446,3 +446,5 @@ export {
   selectTaskById,
   selectTasksForCurrentList,
 } from './taskSelectors';
+
+export { selectStatusesForList, selectStatusById } from './statusSelectors';

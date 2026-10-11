@@ -29,7 +29,7 @@ describe('Seed Fixtures Integrity', () => {
     expect(Object.keys(state.users).length).toBe(3);
     expect(Object.keys(state.tasks).length).toBe(16);
     expect(Object.keys(state.tasks).length).toBeGreaterThanOrEqual(15);
-    expect(Object.keys(state.statuses).length).toBe(9);
+    expect(Object.keys(state.statuses).length).toBe(10);
   });
 
   it('guarantees unique IDs across all domain entities', () => {
@@ -271,6 +271,31 @@ describe('Seed Fixtures Integrity', () => {
         });
         expect(accessible).toBe(true);
       }
+    }
+  });
+
+  it('verifies every list has at least one status in all 3 categories and statusIds membership consistency', () => {
+    const state = createSeedState();
+
+    for (const list of Object.values(state.lists)) {
+      const listStatuses = Object.values(state.statuses).filter(
+        (s) => s.listId === list.id
+      );
+
+      // 1. Membership consistency: set(list.statusIds) === set(statuses with status.listId === list.id)
+      const listStatusIdSet = new Set(list.statusIds);
+      const actualStatusIdSet = new Set(listStatuses.map((s) => s.id));
+      expect(listStatusIdSet).toEqual(actualStatusIdSet);
+
+      // 2. Positions contiguous 0..N-1
+      const sorted = [...listStatuses].sort((a, b) => a.position - b.position);
+      sorted.forEach((s, idx) => expect(s.position).toBe(idx));
+
+      // 3. Every list has all 3 categories
+      const categories = new Set(listStatuses.map((s) => s.category));
+      expect(categories.has('todo')).toBe(true);
+      expect(categories.has('in_progress')).toBe(true);
+      expect(categories.has('done')).toBe(true);
     }
   });
 });

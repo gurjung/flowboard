@@ -87,7 +87,12 @@ export function createSeedState(): SeedState {
       position: 0,
       visibility: 'public',
       archivedAt: null,
-      statusIds: ['status-1-todo', 'status-1-prog', 'status-1-done'],
+      statusIds: [
+        'status-1-todo',
+        'status-1-prog',
+        'status-1-qa',
+        'status-1-done',
+      ],
       createdAt: FIXED_DATE,
       updatedAt: FIXED_DATE,
     },
@@ -135,13 +140,21 @@ export function createSeedState(): SeedState {
       color: '#2563eb',
       position: 1,
     },
+    'status-1-qa': {
+      id: 'status-1-qa',
+      listId: 'list-1',
+      name: 'QA',
+      category: 'in_progress',
+      color: 'amber',
+      position: 2,
+    },
     'status-1-done': {
       id: 'status-1-done',
       listId: 'list-1',
       name: 'Done',
       category: 'done',
       color: '#16a34a',
-      position: 2,
+      position: 3,
     },
     // List 2 statuses
     'status-2-todo': {
