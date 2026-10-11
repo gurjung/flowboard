@@ -453,3 +453,5 @@ export {
   selectKanbanColumns,
   selectCanEditCurrentList,
 } from './kanbanSelectors';
+
+export { sortTasksForListView, nextSort, PRIORITY_RANK } from './taskSorting';

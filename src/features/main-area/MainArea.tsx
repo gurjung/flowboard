@@ -1,16 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useFlowboardStore } from '@/store/useFlowboardStore';
-import { selectCurrentList } from '@/domain/selectors';
+import {
+  selectCurrentList,
+  selectCanEditCurrentList,
+} from '@/domain/selectors';
 import { useListSelectionLoading } from '@/components/main-area/useListSelectionLoading';
 import { KanbanBoard } from '@/features/kanban';
+import { ListView } from '@/features/list-view';
+import { ViewSwitcher, ActiveView } from './ViewSwitcher';
 import { AccessDeniedScreen } from './AccessDeniedScreen';
 import { Inbox, ListFilter } from 'lucide-react';
 
 export const MainArea: React.FC = () => {
   const state = useFlowboardStore();
   const selectedListId = useFlowboardStore((s) => s.selectedListId);
+  const [view, setView] = useState<ActiveView>('kanban');
   const currentListResult = selectCurrentList(state);
   const isLoading = useListSelectionLoading(selectedListId, 150);
+  const canEdit = selectCanEditCurrentList(state);
 
   // 1. Neutral empty state when selectedListId is null
   if (selectedListId === null) {
@@ -64,11 +71,18 @@ export const MainArea: React.FC = () => {
           data-testid="main-area-skeleton"
         >
           <div className="h-6 w-48 animate-pulse rounded bg-slate-200" />
-          <div className="h-10 w-full animate-pulse rounded bg-slate-100" />
+          {view === 'kanban' ? (
+            <div className="flex gap-4">
+              <div className="h-48 w-72 animate-pulse rounded bg-slate-100" />
+              <div className="h-48 w-72 animate-pulse rounded bg-slate-100" />
+            </div>
+          ) : (
+            <div className="h-32 w-full animate-pulse rounded bg-slate-100" />
+          )}
         </div>
       )}
 
-      <header className="shrink-0 border-b border-slate-200 pb-4">
+      <header className="shrink-0 flex items-center justify-between border-b border-slate-200 pb-4">
         <div className="flex items-center gap-2">
           <ListFilter className="h-5 w-5 text-indigo-600" />
           <h1
@@ -78,11 +92,16 @@ export const MainArea: React.FC = () => {
             {list.name}
           </h1>
         </div>
+        <ViewSwitcher view={view} onViewChange={setView} />
       </header>
 
-      {/* Kanban Board View */}
+      {/* Kanban or List View */}
       <section className="mt-4 flex flex-1 flex-col overflow-hidden min-h-0 min-w-0">
-        <KanbanBoard />
+        {view === 'kanban' ? (
+          <KanbanBoard />
+        ) : (
+          <ListView listId={list.id} canEdit={canEdit} key={list.id} />
+        )}
       </section>
 
       {/* Task & Scaffold Verification Canvas (Preserved for F0 test compatibility) */}
