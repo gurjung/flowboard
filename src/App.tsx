@@ -8,7 +8,7 @@ export default function App() {
     <ToastProvider>
       <div className="flex h-screen w-screen overflow-hidden bg-slate-50 font-sans">
         <Sidebar />
-        <div className="flex flex-1 flex-col overflow-hidden">
+        <div className="flex flex-1 flex-col overflow-hidden min-w-0">
           <TopBar />
           <MainArea />
         </div>

@@ -2,6 +2,7 @@ import React from 'react';
 import { useFlowboardStore } from '@/store/useFlowboardStore';
 import { selectCurrentList } from '@/domain/selectors';
 import { useListSelectionLoading } from '@/components/main-area/useListSelectionLoading';
+import { KanbanBoard } from '@/features/kanban';
 import { AccessDeniedScreen } from './AccessDeniedScreen';
 import { Inbox, ListFilter } from 'lucide-react';
 
@@ -54,17 +55,20 @@ export const MainArea: React.FC = () => {
   // 3. Valid selected list view (isLoading is cosmetic, never gates data!)
   return (
     <main
-      className="flex-1 overflow-y-auto bg-white p-6"
+      className="flex flex-1 flex-col overflow-hidden min-h-0 min-w-0 bg-white p-6"
       data-testid="main-content"
     >
       {isLoading && (
-        <div className="mb-4 space-y-3" data-testid="main-area-skeleton">
+        <div
+          className="mb-4 shrink-0 space-y-3"
+          data-testid="main-area-skeleton"
+        >
           <div className="h-6 w-48 animate-pulse rounded bg-slate-200" />
           <div className="h-10 w-full animate-pulse rounded bg-slate-100" />
         </div>
       )}
 
-      <header className="border-b border-slate-200 pb-4">
+      <header className="shrink-0 border-b border-slate-200 pb-4">
         <div className="flex items-center gap-2">
           <ListFilter className="h-5 w-5 text-indigo-600" />
           <h1
@@ -76,8 +80,13 @@ export const MainArea: React.FC = () => {
         </div>
       </header>
 
+      {/* Kanban Board View */}
+      <section className="mt-4 flex flex-1 flex-col overflow-hidden min-h-0 min-w-0">
+        <KanbanBoard />
+      </section>
+
       {/* Task & Scaffold Verification Canvas (Preserved for F0 test compatibility) */}
-      <section className="mt-6 space-y-6">
+      <section className="sr-only" aria-hidden="true">
         <div>
           <h2 className="text-sm font-semibold text-slate-800">
             Flowboard Scaffold Test

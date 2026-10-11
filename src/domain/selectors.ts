@@ -448,3 +448,8 @@ export {
 } from './taskSelectors';
 
 export { selectStatusesForList, selectStatusById } from './statusSelectors';
+
+export {
+  selectKanbanColumns,
+  selectCanEditCurrentList,
+} from './kanbanSelectors';

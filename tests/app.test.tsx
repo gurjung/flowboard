@@ -10,6 +10,6 @@ describe('App Scaffold & Token Verification', () => {
     expect(screen.getByTestId('status-todo-card')).toBeInTheDocument();
     expect(screen.getByTestId('status-in-progress-card')).toBeInTheDocument();
     expect(screen.getByTestId('status-done-card')).toBeInTheDocument();
-    expect(screen.getByText('Urgent')).toBeInTheDocument();
+    expect(screen.getAllByText('Urgent')[0]).toBeInTheDocument();
   });
 });
