@@ -99,10 +99,10 @@ export const MainArea: React.FC = () => {
       )}
 
       <header className="shrink-0 flex items-center justify-between border-b border-slate-200 pb-4 dark:border-slate-800">
-        <div className="flex items-center gap-2">
-          <ListFilter className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
+        <div className="flex items-center gap-2 min-w-0 mr-3">
+          <ListFilter className="h-5 w-5 shrink-0 text-indigo-600 dark:text-indigo-400" />
           <h1
-            className="text-lg font-bold tracking-tight text-slate-900 dark:text-slate-100"
+            className="text-lg font-bold tracking-tight text-slate-900 truncate dark:text-slate-100"
             data-testid="list-title"
           >
             {list.name}

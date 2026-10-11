@@ -120,32 +120,31 @@ export const TaskDrawer: React.FC<TaskDrawerProps> = ({
         >
           <TaskDrawerHeader
             mode={mode}
-            title={title}
-            titleError={titleError}
-            statusId={statusId}
-            statuses={statuses}
-            canEdit={canEdit}
-            titleInputRef={titleInputRef}
             closeBtnRef={closeBtnRef}
-            onTitleChange={setTitle}
-            onStatusChange={setStatusId}
             onClose={onClose}
           />
 
           <TaskDrawerBody
+            title={title}
+            titleError={titleError}
+            titleInputRef={titleInputRef}
+            onTitleChange={setTitle}
+            description={description}
+            onDescriptionChange={setDescription}
+            statusId={statusId}
+            statuses={statuses}
+            onStatusChange={setStatusId}
             priority={priority}
+            onPriorityChange={setPriority}
             assigneeIds={assigneeIds}
+            onAssigneesChange={setAssigneeIds}
             dueDate={dueDate}
             dueDateError={dueDateError}
-            description={description}
             statusCategory={statusCategory}
+            onDueDateChange={setDueDate}
             allUsers={store.users}
             assignableUsers={assignableUsers}
             canEdit={canEdit}
-            onPriorityChange={setPriority}
-            onAssigneesChange={setAssigneeIds}
-            onDueDateChange={setDueDate}
-            onDescriptionChange={setDescription}
           />
 
           <TaskDrawerFooter

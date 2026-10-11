@@ -124,10 +124,10 @@ export const TaskDrawerFooter: React.FC<TaskDrawerFooterProps> = ({
               type="button"
               data-testid="drawer-delete-btn"
               onClick={() => setIsConfirmingDelete(true)}
-              className="inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs font-medium text-rose-600 hover:bg-rose-50 hover:text-rose-700 dark:text-rose-400 dark:hover:bg-rose-950/40"
+              className="inline-flex items-center gap-1.5 rounded-lg px-2.5 py-2 text-xs font-medium text-rose-600 hover:bg-rose-50 hover:text-rose-700 dark:text-rose-400 dark:hover:bg-rose-950/40 transition-colors"
             >
-              <Trash2 className="h-3.5 w-3.5" />
-              Delete task
+              <Trash2 className="h-4 w-4" />
+              <span>Delete Task</span>
             </button>
           ) : (
             <div className="text-[11px] text-slate-400 dark:text-slate-500">
@@ -141,7 +141,7 @@ export const TaskDrawerFooter: React.FC<TaskDrawerFooterProps> = ({
               data-testid="drawer-cancel-btn"
               onClick={onCancel}
               disabled={isSaving}
-              className="rounded-md border border-slate-300 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 shadow-xs hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
+              className="rounded-lg border border-slate-300 bg-white px-3.5 py-2 text-xs font-medium text-slate-700 shadow-xs hover:bg-slate-50 hover:text-slate-900 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 transition-colors"
             >
               Cancel
             </button>
@@ -150,13 +150,13 @@ export const TaskDrawerFooter: React.FC<TaskDrawerFooterProps> = ({
               data-testid="drawer-save-btn"
               onClick={onSave}
               disabled={isSaving}
-              className="rounded-md bg-indigo-600 px-3.5 py-1.5 text-xs font-semibold text-white shadow-xs hover:bg-indigo-700 disabled:opacity-50"
+              className="rounded-lg bg-indigo-600 px-4 py-2 text-xs font-semibold text-white shadow-xs hover:bg-indigo-700 disabled:opacity-50 transition-colors"
             >
               {isSaving
                 ? 'Saving...'
                 : mode === 'create'
                   ? 'Create Task'
-                  : 'Save changes'}
+                  : 'Save Changes'}
             </button>
           </div>
         </div>

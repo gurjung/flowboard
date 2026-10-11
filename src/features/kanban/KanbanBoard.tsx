@@ -54,7 +54,7 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
     >
       <div
         data-testid="kanban-board"
-        className="flex h-full flex-1 gap-4 overflow-x-auto pb-2 pt-1 min-h-0 min-w-0"
+        className="flex h-full w-full flex-1 gap-4 overflow-x-auto pb-2 pt-1 min-h-0 min-w-0"
       >
         {columns.map((column) => (
           <KanbanColumn

@@ -34,7 +34,7 @@ export const DescriptionField: React.FC<DescriptionFieldProps> = ({
     <div className="flex flex-col gap-1.5">
       <label
         htmlFor="drawer-description-input"
-        className="text-xs font-medium text-slate-500 dark:text-slate-400"
+        className="text-xs font-medium text-slate-700 dark:text-slate-300"
       >
         Description
       </label>
@@ -44,8 +44,8 @@ export const DescriptionField: React.FC<DescriptionFieldProps> = ({
         value={description}
         onChange={(e) => onChange(e.target.value)}
         rows={4}
-        placeholder="Add more details about this task..."
-        className="w-full text-sm leading-relaxed text-slate-800 rounded-md border border-slate-200 bg-white p-2.5 shadow-xs focus:border-indigo-500 focus:outline-hidden focus:ring-1 focus:ring-indigo-500 resize-y dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100"
+        placeholder="Add details about this task..."
+        className="w-full text-sm leading-relaxed text-slate-800 rounded-lg border border-slate-300 bg-white p-3 shadow-xs hover:border-slate-400 focus:border-indigo-500 focus:outline-hidden focus:ring-1 focus:ring-indigo-500 resize-y dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100"
       />
     </div>
   );

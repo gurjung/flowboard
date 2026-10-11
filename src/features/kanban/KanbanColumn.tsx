@@ -43,7 +43,7 @@ export const KanbanColumn: React.FC<KanbanColumnProps> = ({
       ref={setNodeRef}
       data-testid={`kanban-column-${status.id}`}
       aria-label={`${status.name} column`}
-      className={`flex w-72 shrink-0 flex-col h-full max-h-full rounded-panel border bg-slate-50/70 p-3 transition-colors dark:bg-slate-900/60 ${
+      className={`flex flex-1 min-w-[16rem] flex-col h-full max-h-full rounded-panel border bg-slate-50/70 p-3 transition-all duration-300 dark:bg-slate-900/60 ${
         isOver
           ? 'border-brand-400 bg-brand-50/30 dark:border-brand-500 dark:bg-brand-950/30'
           : 'border-slate-200/80 hover:border-slate-300 dark:border-slate-800 dark:hover:border-slate-700'
