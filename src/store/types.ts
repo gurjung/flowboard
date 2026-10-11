@@ -64,12 +64,58 @@ export interface FlowboardDataState {
   grants: Record<string, Grant>;
 }
 
+export interface CreateTaskInput {
+  listId: string;
+  title: string;
+  statusId?: string;
+  description?: string;
+  priority?: import('@/domain/types').TaskPriority;
+  assigneeIds?: string[];
+  dueDate?: string | null;
+}
+
+export interface UpdateTaskPatch {
+  title?: string;
+  description?: string;
+  priority?: import('@/domain/types').TaskPriority;
+  assigneeIds?: string[];
+  dueDate?: string | null;
+}
+
+export interface TaskSyncSlice {
+  createTaskSync: (input: CreateTaskInput) => Result<Task>;
+  updateTaskSync: (id: string, patch: UpdateTaskPatch) => Result<Task>;
+  changeTaskStatusSync: (
+    id: string,
+    statusId: string,
+    index?: number
+  ) => Result<Task>;
+  reorderTaskSync: (id: string, newIndex: number) => Result<Task>;
+  moveTaskToListSync: (id: string, targetListId: string) => Result<Task>;
+  deleteTaskSync: (id: string) => Result<void>;
+}
+
+export interface TaskAsyncSlice {
+  createTask: (input: CreateTaskInput) => Promise<Result<Task>>;
+  updateTask: (id: string, patch: UpdateTaskPatch) => Promise<Result<Task>>;
+  changeTaskStatus: (
+    id: string,
+    statusId: string,
+    index?: number
+  ) => Promise<Result<Task>>;
+  reorderTask: (id: string, newIndex: number) => Promise<Result<Task>>;
+  moveTaskToList: (id: string, targetListId: string) => Promise<Result<Task>>;
+  deleteTask: (id: string) => Promise<Result<void>>;
+}
+
 export interface FlowboardStoreState
   extends
     FlowboardDataState,
     SessionSlice,
     ContainerSyncSlice,
-    ContainerAsyncSlice {}
+    ContainerAsyncSlice,
+    TaskSyncSlice,
+    TaskAsyncSlice {}
 
 export type SetStoreState = (
   fn: (state: FlowboardStoreState) => Partial<FlowboardStoreState>

@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { createSeedState } from '@/domain/fixtures';
+import { canViewNode } from '@/domain/permissions';
 
 describe('Seed Fixtures Integrity', () => {
   it('creates fresh independent state instances on every call', () => {
@@ -223,5 +224,53 @@ describe('Seed Fixtures Integrity', () => {
     expect(
       new Set([aliceLists.join(), bobLists.join(), carolLists.join()]).size
     ).toBe(3);
+  });
+
+  it('guarantees per-status-column contiguous 0-indexed positions for active tasks', () => {
+    const state = createSeedState();
+    const tasksByColumn = new Map<string, (typeof state.tasks)[string][]>();
+
+    for (const task of Object.values(state.tasks)) {
+      if (task.archivedAt !== null) continue;
+      const key = `${task.primaryListId}:${task.statusId}`;
+      const existing = tasksByColumn.get(key) ?? [];
+      existing.push(task);
+      tasksByColumn.set(key, existing);
+    }
+
+    for (const [, columnTasks] of tasksByColumn.entries()) {
+      columnTasks.sort((a, b) => a.position - b.position);
+      for (let i = 0; i < columnTasks.length; i++) {
+        expect(columnTasks[i]?.position).toBe(i);
+      }
+    }
+  });
+
+  it('guarantees every assignee on seed data can view their task list', () => {
+    const state = createSeedState();
+    const allNodes = {
+      ...state.workspaces,
+      ...state.spaces,
+      ...state.folders,
+      ...state.lists,
+    };
+    const grants = Object.values(state.grants);
+
+    // Verify each task's assignees can view the task's list
+    for (const task of Object.values(state.tasks)) {
+      const list = state.lists[task.primaryListId];
+      expect(list).toBeDefined();
+
+      for (const userId of task.assigneeIds) {
+        const user = state.users[userId];
+        expect(user).toBeDefined();
+
+        const accessible = canViewNode(user, task.primaryListId, {
+          nodes: allNodes,
+          grants,
+        });
+        expect(accessible).toBe(true);
+      }
+    }
   });
 });

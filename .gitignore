@@ -27,6 +27,8 @@ dist-ssr
 /study-notes
 study-notes/
 
-# Internal decision logging (kept local, used to draft AI_USAGE.md)
+# Internal decision logging & project understanding (kept local, excluded from git)
 /docs/DECISIONS_LOG.md
 docs/DECISIONS_LOG.md
+/docs/project-understanding
+docs/project-understanding/

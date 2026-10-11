@@ -440,3 +440,9 @@ export function getDescendantCounts(
 
   return { containerCount, taskCount };
 }
+
+export {
+  selectTasksForList,
+  selectTaskById,
+  selectTasksForCurrentList,
+} from './taskSelectors';

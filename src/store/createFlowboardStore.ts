@@ -4,6 +4,7 @@ import { SeedState } from '@/domain/types';
 import { createSeedState } from '@/domain/fixtures';
 import { createSessionSlice } from './slices/sessionSlice';
 import { createContainerSyncSlice } from './slices/containerSlice';
+import { createTaskSlice } from './slices/taskSlice';
 
 const defaultDeps: StoreDeps = {
   now: () => new Date().toISOString(),
@@ -31,6 +32,7 @@ export function createFlowboardStore(
   return createStore<FlowboardStoreState>((set, get) => {
     const sessionSlice = createSessionSlice(set, get);
     const containerSyncSlice = createContainerSyncSlice(set, get, deps);
+    const taskSlice = createTaskSlice(set, get, deps);
 
     return {
       // Data state initialized from fixtures / parameter
@@ -91,6 +93,9 @@ export function createFlowboardStore(
         }
         return result;
       },
+
+      // Task operations (sync + async with latency)
+      ...taskSlice,
     };
   });
 }
