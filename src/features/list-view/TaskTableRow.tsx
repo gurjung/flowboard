@@ -31,17 +31,45 @@ export const TaskTableRow: React.FC<TaskTableRowProps> = ({
   onDeleteTask,
 }) => {
   const formattedDue = formatDueDate(task.dueDate, status?.category ?? 'todo');
+  const titleButtonRef = React.useRef<HTMLButtonElement>(null);
+
+  const handleRowClick = (e: React.MouseEvent<HTMLTableRowElement>) => {
+    // G3: Ignore click when user is selecting text
+    const selection = window.getSelection();
+    if (selection && selection.toString().trim().length > 0) {
+      return;
+    }
+
+    // G2: Ignore if click was within interactive controls (buttons, menus)
+    const target = e.target as HTMLElement;
+    if (
+      target.closest(
+        'button, [role="menu"], [role="menuitem"], [data-headlessui-state]'
+      )
+    ) {
+      return;
+    }
+
+    // G4: Set focus to title button so focus is restored on close
+    titleButtonRef.current?.focus();
+    onOpenTask?.(task.id);
+  };
 
   return (
     <tr
       data-testid={`task-row-${task.id}`}
-      className="border-b border-slate-100 hover:bg-slate-50/80 transition-colors dark:border-slate-800 dark:hover:bg-slate-800/60"
+      onClick={handleRowClick}
+      className="border-b border-slate-100 hover:bg-slate-50/80 cursor-pointer transition-colors dark:border-slate-800 dark:hover:bg-slate-800/60"
     >
       {/* Title */}
       <td className="py-2.5 pl-4 pr-3 max-w-xs sm:max-w-md">
         <button
+          ref={titleButtonRef}
           type="button"
-          onClick={() => onOpenTask?.(task.id)}
+          onClick={(e) => {
+            e.stopPropagation();
+            onOpenTask?.(task.id);
+          }}
           data-testid={`task-row-title-${task.id}`}
           className="block w-full text-left font-medium text-slate-900 text-xs truncate hover:text-indigo-600 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-indigo-500 rounded dark:text-slate-100 dark:hover:text-indigo-400"
         >
@@ -87,7 +115,10 @@ export const TaskTableRow: React.FC<TaskTableRowProps> = ({
       </td>
 
       {/* Actions */}
-      <td className="py-2.5 pl-2 pr-4 text-right whitespace-nowrap w-12">
+      <td
+        className="py-2.5 pl-2 pr-4 text-right whitespace-nowrap w-12"
+        onClick={(e) => e.stopPropagation()}
+      >
         {canEdit && (
           <Menu as="div" className="relative inline-block text-left">
             <MenuButton

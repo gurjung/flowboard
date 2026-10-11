@@ -90,4 +90,103 @@ describe('ListView Actions Column & 3-Dots Popup Menu (Feedback Item 3)', () => 
 
     expect(screen.queryByTestId('task-actions-task-1')).not.toBeInTheDocument();
   });
+
+  it('clicking task row opens task modal with task details exactly once', () => {
+    const handleOpen = vi.fn();
+    render(
+      <ToastProvider>
+        <ListView listId="list-1" canEdit={true} onOpenTask={handleOpen} />
+      </ToastProvider>
+    );
+
+    const row = screen.getByTestId('task-row-task-1');
+    fireEvent.click(row);
+
+    expect(handleOpen).toHaveBeenCalledTimes(1);
+    expect(handleOpen).toHaveBeenCalledWith('task-1');
+  });
+
+  it('clicking 3-dots actions menu button does not trigger row click modal open', () => {
+    const handleOpen = vi.fn();
+    render(
+      <ToastProvider>
+        <ListView listId="list-1" canEdit={true} onOpenTask={handleOpen} />
+      </ToastProvider>
+    );
+
+    const actionBtn = screen.getByTestId('task-actions-task-1');
+    fireEvent.click(actionBtn);
+
+    // Clicking the action button opens menu, does not open task modal
+    expect(handleOpen).not.toHaveBeenCalled();
+  });
+
+  it('menu Edit opens modal exactly once without double-opening from row click', () => {
+    const handleOpen = vi.fn();
+    render(
+      <ToastProvider>
+        <ListView listId="list-1" canEdit={true} onOpenTask={handleOpen} />
+      </ToastProvider>
+    );
+
+    const actionBtn = screen.getByTestId('task-actions-task-1');
+    fireEvent.click(actionBtn);
+
+    const editBtn = screen.getByRole('menuitem', { name: /edit/i });
+    fireEvent.click(editBtn);
+
+    expect(handleOpen).toHaveBeenCalledTimes(1);
+    expect(handleOpen).toHaveBeenCalledWith('task-1');
+  });
+
+  it('ignores row click when user has active text selection', () => {
+    const handleOpen = vi.fn();
+    const originalGetSelection = window.getSelection;
+    window.getSelection = vi.fn().mockReturnValue({
+      toString: () => 'some selected text',
+    });
+
+    render(
+      <ToastProvider>
+        <ListView listId="list-1" canEdit={true} onOpenTask={handleOpen} />
+      </ToastProvider>
+    );
+
+    const row = screen.getByTestId('task-row-task-1');
+    fireEvent.click(row);
+
+    expect(handleOpen).not.toHaveBeenCalled();
+
+    window.getSelection = originalGetSelection;
+  });
+
+  it('row click sets focus to task title button', () => {
+    const handleOpen = vi.fn();
+    render(
+      <ToastProvider>
+        <ListView listId="list-1" canEdit={true} onOpenTask={handleOpen} />
+      </ToastProvider>
+    );
+
+    const row = screen.getByTestId('task-row-task-1');
+    const titleBtn = screen.getByTestId('task-row-title-task-1');
+
+    fireEvent.click(row);
+    expect(titleBtn).toHaveFocus();
+    expect(handleOpen).toHaveBeenCalledWith('task-1');
+  });
+
+  it('read-only user can open modal on row click (prop-level)', () => {
+    const handleOpen = vi.fn();
+    render(
+      <ToastProvider>
+        <ListView listId="list-1" canEdit={false} onOpenTask={handleOpen} />
+      </ToastProvider>
+    );
+
+    const row = screen.getByTestId('task-row-task-1');
+    fireEvent.click(row);
+
+    expect(handleOpen).toHaveBeenCalledWith('task-1');
+  });
 });
