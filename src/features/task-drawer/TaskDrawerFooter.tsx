@@ -59,11 +59,11 @@ export const TaskDrawerFooter: React.FC<TaskDrawerFooterProps> = ({
 
   if (!canEdit) {
     return (
-      <div className="border-t border-slate-200 bg-slate-50 px-6 py-3 flex justify-end">
+      <div className="border-t border-slate-200 bg-slate-50 px-6 py-3 flex justify-end dark:border-slate-800 dark:bg-slate-900">
         <button
           type="button"
           onClick={onCancel}
-          className="rounded-md border border-slate-300 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-50"
+          className="rounded-md border border-slate-300 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
         >
           Close
         </button>
@@ -72,24 +72,26 @@ export const TaskDrawerFooter: React.FC<TaskDrawerFooterProps> = ({
   }
 
   return (
-    <div className="border-t border-slate-200 bg-slate-50 px-6 py-3.5">
+    <div className="border-t border-slate-200 bg-slate-50 px-6 py-3.5 dark:border-slate-800 dark:bg-slate-900">
       {isConfirmingDelete ? (
         <div
           data-testid="drawer-delete-confirm-panel"
-          className="rounded-lg border border-rose-200 bg-rose-50 p-3 space-y-2.5"
+          className="rounded-lg border border-rose-200 bg-rose-50 p-3 space-y-2.5 dark:border-rose-900/60 dark:bg-rose-950/40"
         >
           <div className="flex items-start gap-2">
-            <AlertTriangle className="h-4 w-4 text-rose-600 shrink-0 mt-0.5" />
-            <div className="text-xs text-rose-800">
+            <AlertTriangle className="h-4 w-4 text-rose-600 shrink-0 mt-0.5 dark:text-rose-400" />
+            <div className="text-xs text-rose-800 dark:text-rose-300">
               <p className="font-semibold mb-0.5">Delete this task?</p>
-              <p className="text-slate-600 truncate max-w-[18rem]">
+              <p className="text-slate-600 truncate max-w-[18rem] dark:text-slate-300">
                 &quot;{taskTitle}&quot;
               </p>
             </div>
           </div>
 
           {deleteError && (
-            <p className="text-xs text-rose-700 font-medium">{deleteError}</p>
+            <p className="text-xs text-rose-700 font-medium dark:text-rose-400">
+              {deleteError}
+            </p>
           )}
 
           <div className="flex items-center justify-end gap-2 pt-1">
@@ -100,7 +102,7 @@ export const TaskDrawerFooter: React.FC<TaskDrawerFooterProps> = ({
                 setDeleteError(null);
               }}
               disabled={isDeleting}
-              className="rounded-md border border-slate-300 bg-white px-2.5 py-1 text-xs font-medium text-slate-700 hover:bg-slate-50"
+              className="rounded-md border border-slate-300 bg-white px-2.5 py-1 text-xs font-medium text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
             >
               Cancel
             </button>
@@ -122,13 +124,13 @@ export const TaskDrawerFooter: React.FC<TaskDrawerFooterProps> = ({
               type="button"
               data-testid="drawer-delete-btn"
               onClick={() => setIsConfirmingDelete(true)}
-              className="inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs font-medium text-rose-600 hover:bg-rose-50 hover:text-rose-700"
+              className="inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs font-medium text-rose-600 hover:bg-rose-50 hover:text-rose-700 dark:text-rose-400 dark:hover:bg-rose-950/40"
             >
               <Trash2 className="h-3.5 w-3.5" />
               Delete task
             </button>
           ) : (
-            <div className="text-[11px] text-slate-400">
+            <div className="text-[11px] text-slate-400 dark:text-slate-500">
               {createdAt && `Created ${formatTimestamp(createdAt)}`}
             </div>
           )}
@@ -139,7 +141,7 @@ export const TaskDrawerFooter: React.FC<TaskDrawerFooterProps> = ({
               data-testid="drawer-cancel-btn"
               onClick={onCancel}
               disabled={isSaving}
-              className="rounded-md border border-slate-300 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 shadow-xs hover:bg-slate-50"
+              className="rounded-md border border-slate-300 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 shadow-xs hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
             >
               Cancel
             </button>

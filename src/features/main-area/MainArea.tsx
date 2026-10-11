@@ -10,6 +10,7 @@ import { ListView } from '@/features/list-view';
 import { TaskDrawer } from '@/features/task-drawer';
 import { ViewSwitcher, ActiveView } from './ViewSwitcher';
 import { AccessDeniedScreen } from './AccessDeniedScreen';
+import { ScaffoldTestCanvas } from './ScaffoldTestCanvas';
 import { Inbox, ListFilter } from 'lucide-react';
 
 export const MainArea: React.FC = () => {
@@ -35,16 +36,16 @@ export const MainArea: React.FC = () => {
   if (selectedListId === null) {
     return (
       <main
-        className="flex flex-1 flex-col items-center justify-center bg-white p-8 text-center text-slate-500"
+        className="flex flex-1 flex-col items-center justify-center bg-white p-8 text-center text-slate-500 dark:bg-slate-950 dark:text-slate-400"
         data-testid="no-list-selected"
       >
-        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-slate-400">
+        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-slate-400 dark:bg-slate-900 dark:text-slate-500">
           <Inbox className="h-6 w-6" />
         </div>
-        <h3 className="mt-3 text-sm font-semibold text-slate-700">
+        <h3 className="mt-3 text-sm font-semibold text-slate-700 dark:text-slate-200">
           Select a list
         </h3>
-        <p className="mt-1 text-xs text-slate-500">
+        <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
           Choose a list from the sidebar to view sprint tasks and workflows.
         </p>
       </main>
@@ -54,11 +55,14 @@ export const MainArea: React.FC = () => {
   // 2. Stale or invalid selection (FORBIDDEN, CONFLICT, NOT_FOUND, VALIDATION)
   if (!currentListResult.success) {
     return (
-      <main className="flex flex-1 bg-white p-6" data-testid="empty-main-area">
+      <main
+        className="flex flex-1 bg-white p-6 dark:bg-slate-950"
+        data-testid="empty-main-area"
+      >
         {isLoading && (
           <div className="space-y-3" data-testid="main-area-skeleton">
-            <div className="h-6 w-48 animate-pulse rounded bg-slate-200" />
-            <div className="h-10 w-full animate-pulse rounded bg-slate-100" />
+            <div className="h-6 w-48 animate-pulse rounded bg-slate-200 dark:bg-slate-800" />
+            <div className="h-10 w-full animate-pulse rounded bg-slate-100 dark:bg-slate-900" />
           </div>
         )}
         <AccessDeniedScreen code={currentListResult.error.code} />
@@ -74,7 +78,7 @@ export const MainArea: React.FC = () => {
   // 3. Valid selected list view (isLoading is cosmetic, never gates data!)
   return (
     <main
-      className="flex flex-1 flex-col overflow-hidden min-h-0 min-w-0 bg-white p-6"
+      className="flex flex-1 flex-col overflow-hidden min-h-0 min-w-0 bg-white p-6 dark:bg-slate-950"
       data-testid="main-content"
     >
       {isLoading && (
@@ -82,23 +86,23 @@ export const MainArea: React.FC = () => {
           className="mb-4 shrink-0 space-y-3"
           data-testid="main-area-skeleton"
         >
-          <div className="h-6 w-48 animate-pulse rounded bg-slate-200" />
+          <div className="h-6 w-48 animate-pulse rounded bg-slate-200 dark:bg-slate-800" />
           {view === 'kanban' ? (
             <div className="flex gap-4">
-              <div className="h-48 w-72 animate-pulse rounded bg-slate-100" />
-              <div className="h-48 w-72 animate-pulse rounded bg-slate-100" />
+              <div className="h-48 w-72 animate-pulse rounded bg-slate-100 dark:bg-slate-900" />
+              <div className="h-48 w-72 animate-pulse rounded bg-slate-100 dark:bg-slate-900" />
             </div>
           ) : (
-            <div className="h-32 w-full animate-pulse rounded bg-slate-100" />
+            <div className="h-32 w-full animate-pulse rounded bg-slate-100 dark:bg-slate-900" />
           )}
         </div>
       )}
 
-      <header className="shrink-0 flex items-center justify-between border-b border-slate-200 pb-4">
+      <header className="shrink-0 flex items-center justify-between border-b border-slate-200 pb-4 dark:border-slate-800">
         <div className="flex items-center gap-2">
-          <ListFilter className="h-5 w-5 text-indigo-600" />
+          <ListFilter className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
           <h1
-            className="text-xl font-bold tracking-tight text-slate-900"
+            className="text-lg font-bold tracking-tight text-slate-900 dark:text-slate-100"
             data-testid="list-title"
           >
             {list.name}
@@ -142,51 +146,7 @@ export const MainArea: React.FC = () => {
       />
 
       {/* Task & Scaffold Verification Canvas (Preserved for F0 test compatibility) */}
-      <section className="sr-only" aria-hidden="true">
-        <div>
-          <h2 className="text-sm font-semibold text-slate-800">
-            Flowboard Scaffold Test
-          </h2>
-          <p className="text-xs text-slate-500">
-            Verifying Tailwind v4 theme tokens and component setup.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-          <div
-            data-testid="status-todo-card"
-            className="rounded-panel border border-status-todo-border bg-status-todo-light p-4 shadow-card"
-          >
-            <span className="font-semibold text-status-todo">To Do</span>
-          </div>
-          <div
-            data-testid="status-in-progress-card"
-            className="rounded-panel border border-status-in_progress-border bg-status-in_progress-light p-4 shadow-card"
-          >
-            <span className="font-semibold text-status-in_progress">
-              In Progress
-            </span>
-          </div>
-          <div
-            data-testid="status-done-card"
-            className="rounded-panel border border-status-done-border bg-status-done-light p-4 shadow-card"
-          >
-            <span className="font-semibold text-status-done">Done</span>
-          </div>
-        </div>
-
-        <div className="flex flex-wrap gap-3">
-          <span className="text-xs font-medium text-priority-urgent">
-            Urgent
-          </span>
-          <span className="text-xs font-medium text-priority-high">High</span>
-          <span className="text-xs font-medium text-priority-normal">
-            Normal
-          </span>
-          <span className="text-xs font-medium text-priority-low">Low</span>
-          <span className="text-xs font-medium text-priority-none">None</span>
-        </div>
-      </section>
+      <ScaffoldTestCanvas />
     </main>
   );
 };

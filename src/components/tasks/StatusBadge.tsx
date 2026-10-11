@@ -1,6 +1,6 @@
 import React from 'react';
-import { Status, StatusColorToken } from '@/domain/types';
-import { STATUS_COLOR_MAP } from '@/domain/statusColors';
+import { Status } from '@/domain/types';
+import { getStatusStyles } from '@/domain/statusColors';
 
 export interface StatusBadgeProps {
   status?: Status | null;
@@ -12,7 +12,7 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({ status }) => {
     return (
       <span
         data-testid="status-badge-unknown"
-        className="inline-flex items-center gap-1.5 rounded-full border border-slate-300 bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-600"
+        className="inline-flex items-center gap-1.5 rounded-full border border-slate-300 bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400"
       >
         <span className="h-1.5 w-1.5 rounded-full bg-slate-400" />
         Unknown
@@ -20,9 +20,7 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({ status }) => {
     );
   }
 
-  const styles =
-    STATUS_COLOR_MAP[status.color as StatusColorToken] ||
-    STATUS_COLOR_MAP.slate;
+  const styles = getStatusStyles(status.color, status.category);
 
   return (
     <span

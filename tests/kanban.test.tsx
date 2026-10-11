@@ -1,8 +1,16 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import {
+  render,
+  screen,
+  fireEvent,
+  renderHook,
+  act,
+} from '@testing-library/react';
 import { useFlowboardStore } from '@/store/useFlowboardStore';
 import { KanbanBoard } from '@/features/kanban/KanbanBoard';
+import { useKanbanDnd } from '@/features/kanban/useKanbanDnd';
 import { ToastProvider } from '@/components/toasts';
+import type { DragStartEvent } from '@dnd-kit/core';
 
 import { createSeedState } from '@/domain/fixtures';
 
@@ -127,5 +135,57 @@ describe('KanbanBoard component & interaction tests', () => {
 
     const updatedTask1 = useFlowboardStore.getState().tasks['task-1'];
     expect(updatedTask1?.position).toBe(1);
+  });
+
+  it('viewer cannot drag: useKanbanDnd disables sensors and ignores drag events when canEdit=false', () => {
+    const { result } = renderHook(
+      () =>
+        useKanbanDnd(
+          [
+            {
+              status: {
+                id: 'status-1',
+                listId: 'list-1',
+                name: 'To Do',
+                category: 'todo',
+                color: 'slate',
+                position: 0,
+              },
+              tasks: [
+                {
+                  id: 'task-1',
+                  primaryListId: 'list-1',
+                  statusId: 'status-1',
+                  title: 'Task 1',
+                  priority: 'normal',
+                  assigneeIds: [],
+                  dueDate: null,
+                  position: 0,
+                  archivedAt: null,
+                  createdAt: '2026-10-10T00:00:00.000Z',
+                  updatedAt: '2026-10-10T00:00:00.000Z',
+                },
+              ],
+            },
+          ],
+          false
+        ),
+      { wrapper: ToastProvider }
+    );
+
+    // Sensors array must be empty
+    expect(result.current.sensors).toHaveLength(0);
+
+    // Drag start is ignored
+    act(() => {
+      result.current.handleDragStart({
+        active: {
+          id: 'task-1',
+          data: { current: {} },
+          rect: { current: { initial: null, translated: null } },
+        },
+      } as unknown as DragStartEvent);
+    });
+    expect(result.current.activeTask).toBeNull();
   });
 });

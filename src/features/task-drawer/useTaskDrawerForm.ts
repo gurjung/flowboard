@@ -68,11 +68,17 @@ export function useTaskDrawerForm({
     }
 
     if (dueDate) {
-      const dueDay = isoToDateInput(dueDate);
-      const todayDay = getLocalTodayDateInput();
-      if (dueDay < todayDay) {
-        setDueDateError('Due date cannot be in the past');
-        valid = false;
+      const isUnchangedInEdit =
+        mode === 'edit' && currentTask?.dueDate === dueDate;
+      if (!isUnchangedInEdit) {
+        const dueDay = isoToDateInput(dueDate);
+        const todayDay = getLocalTodayDateInput();
+        if (dueDay < todayDay) {
+          setDueDateError('Due date cannot be in the past');
+          valid = false;
+        } else {
+          setDueDateError(null);
+        }
       } else {
         setDueDateError(null);
       }

@@ -179,4 +179,81 @@ describe('TaskDetailDrawer Unified Modal & Save/Cancel (Feedback Amendments)', (
 
     createSpy.mockRestore();
   });
+
+  it("editing an already-overdue task's title saves without a due-date error when the date is unchanged", async () => {
+    // Put task-1 into an overdue state with an old due date
+    const state = useFlowboardStore.getState();
+    useFlowboardStore.setState({
+      tasks: {
+        ...state.tasks,
+        'task-1': {
+          ...state.tasks['task-1']!,
+          dueDate: '2020-01-01T00:00:00.000Z',
+        },
+      },
+    });
+
+    const updateSpy = vi.spyOn(useFlowboardStore.getState(), 'updateTask');
+    render(<App />);
+
+    fireEvent.click(screen.getByTestId('task-card-task-1'));
+    await screen.findByTestId('task-drawer');
+
+    // Edit title only
+    const titleInput = screen.getByTestId('drawer-title-input');
+    fireEvent.change(titleInput, {
+      target: { value: 'Updated Title on Overdue Task' },
+    });
+
+    // Click Save changes
+    fireEvent.click(screen.getByTestId('drawer-save-btn'));
+
+    // Should NOT show "Due date cannot be in the past"
+    expect(
+      screen.queryByText(/Due date cannot be in the past/i)
+    ).not.toBeInTheDocument();
+
+    await waitFor(() => {
+      expect(updateSpy).toHaveBeenCalledWith(
+        'task-1',
+        expect.objectContaining({
+          title: 'Updated Title on Overdue Task',
+          dueDate: '2020-01-01T00:00:00.000Z',
+        })
+      );
+    });
+
+    updateSpy.mockRestore();
+  });
+
+  it('closes modal when Escape key is pressed', async () => {
+    render(<App />);
+
+    fireEvent.click(screen.getByTestId('task-card-task-1'));
+    const modal = await screen.findByTestId('task-drawer');
+    expect(modal).toBeInTheDocument();
+
+    // Press Escape
+    fireEvent.keyDown(modal, { key: 'Escape' });
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('task-drawer')).not.toBeInTheDocument();
+    });
+  });
+
+  it('closes modal when backdrop overlay is clicked', async () => {
+    render(<App />);
+
+    fireEvent.click(screen.getByTestId('task-card-task-1'));
+    const modal = await screen.findByTestId('task-drawer');
+    expect(modal).toBeInTheDocument();
+
+    // Click backdrop
+    const backdrop = screen.getByTestId('task-drawer-backdrop');
+    fireEvent.click(backdrop);
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('task-drawer')).not.toBeInTheDocument();
+    });
+  });
 });

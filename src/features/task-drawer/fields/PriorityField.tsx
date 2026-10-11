@@ -24,7 +24,7 @@ export const PriorityField: React.FC<PriorityFieldProps> = ({
   if (!canEdit) {
     return (
       <div className="flex items-center gap-2">
-        <span className="text-xs font-medium text-slate-500 w-24">
+        <span className="text-xs font-medium text-slate-500 w-24 dark:text-slate-400">
           Priority
         </span>
         <PriorityBadge priority={priority} />
@@ -36,7 +36,7 @@ export const PriorityField: React.FC<PriorityFieldProps> = ({
     <div className="flex items-center gap-2">
       <label
         htmlFor="drawer-priority-select"
-        className="text-xs font-medium text-slate-500 w-24"
+        className="text-xs font-medium text-slate-500 w-24 dark:text-slate-400"
       >
         Priority
       </label>
@@ -45,7 +45,7 @@ export const PriorityField: React.FC<PriorityFieldProps> = ({
         data-testid="drawer-priority-select"
         value={priority}
         onChange={(e) => onChange(e.target.value as Task['priority'])}
-        className="text-xs font-medium rounded-md border border-slate-200 bg-white px-2 py-1 text-slate-800 shadow-xs focus:border-indigo-500 focus:outline-hidden focus:ring-1 focus:ring-indigo-500"
+        className="text-xs font-medium rounded-md border border-slate-200 bg-white px-2 py-1 text-slate-800 shadow-xs focus:border-indigo-500 focus:outline-hidden focus:ring-1 focus:ring-indigo-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
       >
         {PRIORITIES.map((p) => (
           <option key={p.value} value={p.value}>

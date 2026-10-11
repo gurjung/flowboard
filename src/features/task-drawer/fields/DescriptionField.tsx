@@ -14,12 +14,14 @@ export const DescriptionField: React.FC<DescriptionFieldProps> = ({
   if (!canEdit) {
     return (
       <div className="flex flex-col gap-1.5">
-        <span className="text-xs font-medium text-slate-500">Description</span>
-        <div className="text-sm text-slate-700 whitespace-pre-wrap bg-slate-50 rounded-md p-3 border border-slate-100 min-h-[4rem]">
+        <span className="text-xs font-medium text-slate-500 dark:text-slate-400">
+          Description
+        </span>
+        <div className="text-sm text-slate-700 whitespace-pre-wrap bg-slate-50 rounded-md p-3 border border-slate-100 min-h-[4rem] dark:text-slate-200 dark:bg-slate-800/60 dark:border-slate-800">
           {description ? (
             description
           ) : (
-            <span className="text-slate-400 italic">
+            <span className="text-slate-400 italic dark:text-slate-500">
               No description provided.
             </span>
           )}
@@ -32,7 +34,7 @@ export const DescriptionField: React.FC<DescriptionFieldProps> = ({
     <div className="flex flex-col gap-1.5">
       <label
         htmlFor="drawer-description-input"
-        className="text-xs font-medium text-slate-500"
+        className="text-xs font-medium text-slate-500 dark:text-slate-400"
       >
         Description
       </label>
@@ -43,7 +45,7 @@ export const DescriptionField: React.FC<DescriptionFieldProps> = ({
         onChange={(e) => onChange(e.target.value)}
         rows={4}
         placeholder="Add more details about this task..."
-        className="w-full text-xs text-slate-800 rounded-md border border-slate-200 bg-white p-2.5 shadow-xs focus:border-indigo-500 focus:outline-hidden focus:ring-1 focus:ring-indigo-500 resize-y"
+        className="w-full text-sm leading-relaxed text-slate-800 rounded-md border border-slate-200 bg-white p-2.5 shadow-xs focus:border-indigo-500 focus:outline-hidden focus:ring-1 focus:ring-indigo-500 resize-y dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100"
       />
     </div>
   );

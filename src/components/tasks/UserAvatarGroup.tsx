@@ -31,7 +31,7 @@ export const UserAvatarGroup: React.FC<UserAvatarGroupProps> = ({
           <div
             key={userId}
             title={user.name}
-            className="flex h-5 w-5 items-center justify-center rounded-full bg-slate-200 text-[10px] font-semibold text-slate-700 ring-1 ring-white"
+            className="flex h-5 w-5 items-center justify-center rounded-full bg-slate-200 text-[10px] font-semibold text-slate-700 ring-1 ring-white dark:bg-slate-700 dark:text-slate-200 dark:ring-slate-800"
           >
             {initials}
           </div>

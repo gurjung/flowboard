@@ -71,7 +71,7 @@ export const QuickTaskInput: React.FC<QuickTaskInputProps> = ({
   return (
     <form
       onSubmit={handleSubmit}
-      className="rounded-card border border-brand-300 bg-white p-3 shadow-card"
+      className="rounded-card border border-brand-300 bg-white p-3 shadow-card dark:border-brand-500/50 dark:bg-slate-800"
       data-testid={`quick-task-form-${statusId}`}
     >
       <input
@@ -87,13 +87,13 @@ export const QuickTaskInput: React.FC<QuickTaskInputProps> = ({
         onKeyDown={handleKeyDown}
         placeholder="What needs to be done?"
         data-testid={`quick-task-input-${statusId}`}
-        className="w-full rounded border border-slate-300 px-2.5 py-1.5 text-xs text-slate-800 placeholder-slate-400 focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500"
+        className="w-full rounded border border-slate-300 px-2.5 py-1.5 text-xs text-slate-800 placeholder-slate-400 focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 dark:placeholder-slate-500"
       />
 
       {error && (
         <p
           data-testid={`quick-task-error-${statusId}`}
-          className="mt-1 text-[11px] font-medium text-red-600"
+          className="mt-1 text-[11px] font-medium text-red-600 dark:text-red-400"
         >
           {error}
         </p>
@@ -103,7 +103,7 @@ export const QuickTaskInput: React.FC<QuickTaskInputProps> = ({
         <button
           type="button"
           onClick={onClose}
-          className="inline-flex items-center gap-1 text-xs text-slate-500 hover:text-slate-700"
+          className="inline-flex items-center gap-1 text-xs text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"
         >
           <X className="h-3.5 w-3.5" />
           Cancel

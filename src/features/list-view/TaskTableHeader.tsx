@@ -18,17 +18,19 @@ export const TaskTableHeader: React.FC<TaskTableHeaderProps> = ({
 
   const renderSortIcon = (key: SortKey) => {
     if (!sortConfig || sortConfig.key !== key) {
-      return <ArrowUpDown className="h-3 w-3 text-slate-400 opacity-60" />;
+      return (
+        <ArrowUpDown className="h-3 w-3 text-slate-400 dark:text-slate-500 opacity-60" />
+      );
     }
     return sortConfig.direction === 'asc' ? (
-      <ChevronUp className="h-3.5 w-3.5 text-brand-600" />
+      <ChevronUp className="h-3.5 w-3.5 text-brand-600 dark:text-brand-400" />
     ) : (
-      <ChevronDown className="h-3.5 w-3.5 text-brand-600" />
+      <ChevronDown className="h-3.5 w-3.5 text-brand-600 dark:text-brand-400" />
     );
   };
 
   return (
-    <thead className="bg-slate-50 text-left text-xs font-semibold text-slate-600 border-b border-slate-200">
+    <thead className="bg-slate-50 text-left text-xs font-semibold text-slate-600 border-b border-slate-200 dark:bg-slate-800/80 dark:text-slate-300 dark:border-slate-800">
       <tr>
         <th scope="col" data-testid="th-title" className="py-3 pl-4 pr-3">
           Title
@@ -41,7 +43,7 @@ export const TaskTableHeader: React.FC<TaskTableHeaderProps> = ({
           data-testid="th-priority"
           aria-sort={getAriaSort('priority')}
           onClick={() => onSortChange('priority')}
-          className="px-3 py-3 w-28 cursor-pointer select-none hover:bg-slate-100 transition-colors"
+          className="px-3 py-3 w-28 cursor-pointer select-none hover:bg-slate-100 dark:hover:bg-slate-700/60 transition-colors"
         >
           <div className="flex items-center gap-1.5">
             <span>Priority</span>
@@ -53,7 +55,7 @@ export const TaskTableHeader: React.FC<TaskTableHeaderProps> = ({
           data-testid="th-dueDate"
           aria-sort={getAriaSort('dueDate')}
           onClick={() => onSortChange('dueDate')}
-          className="px-3 py-3 w-32 cursor-pointer select-none hover:bg-slate-100 transition-colors"
+          className="px-3 py-3 w-32 cursor-pointer select-none hover:bg-slate-100 dark:hover:bg-slate-700/60 transition-colors"
         >
           <div className="flex items-center gap-1.5">
             <span>Due date</span>

@@ -64,10 +64,10 @@ export const ToastItem: React.FC<ToastItemProps> = ({ toast }) => {
 
   const borderClass =
     toast.type === 'error'
-      ? 'border-rose-200 bg-rose-50/95 text-rose-900'
+      ? 'border-rose-200 bg-rose-50/95 text-rose-900 dark:border-rose-900/60 dark:bg-rose-950/90 dark:text-rose-200'
       : toast.type === 'success'
-        ? 'border-emerald-200 bg-emerald-50/95 text-emerald-900'
-        : 'border-slate-200 bg-white/95 text-slate-900';
+        ? 'border-emerald-200 bg-emerald-50/95 text-emerald-900 dark:border-emerald-900/60 dark:bg-emerald-950/90 dark:text-emerald-200'
+        : 'border-slate-200 bg-white/95 text-slate-900 dark:border-slate-800 dark:bg-slate-900/95 dark:text-slate-100';
 
   return (
     <div
@@ -85,7 +85,7 @@ export const ToastItem: React.FC<ToastItemProps> = ({ toast }) => {
         type="button"
         onClick={() => dismiss(toast.id)}
         aria-label="Dismiss notification"
-        className="rounded p-0.5 text-slate-400 hover:bg-slate-200/50 hover:text-slate-700 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+        className="rounded p-0.5 text-slate-400 hover:bg-slate-200/50 hover:text-slate-700 focus:outline-none focus:ring-1 focus:ring-indigo-500 dark:hover:bg-slate-800 dark:hover:text-slate-200"
       >
         <X className="h-3.5 w-3.5" />
       </button>

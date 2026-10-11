@@ -28,7 +28,7 @@ export const UserSwitcher: React.FC = () => {
           data-testid="user-select"
           value={currentUserId}
           onChange={(e) => setCurrentUser(e.target.value)}
-          className="rounded border border-slate-300 bg-white px-2 py-1 text-xs font-medium text-slate-800 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+          className="rounded border border-slate-300 bg-white px-2 py-1 text-xs font-medium text-slate-800 shadow-sm focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:border-indigo-500"
         >
           {userList.map((u) => (
             <option key={u.id} value={u.id}>

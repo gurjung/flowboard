@@ -2,18 +2,24 @@ import { Sidebar } from '@/components/sidebar';
 import { MainArea } from '@/features/main-area';
 import { TopBar } from '@/features/topbar';
 import { ToastProvider, ToastContainer } from '@/components/toasts';
+import { ThemeProvider } from '@/components/theme';
+import { SidebarProvider } from '@/components/layout';
 
 export default function App() {
   return (
-    <ToastProvider>
-      <div className="flex h-screen w-screen overflow-hidden bg-slate-50 font-sans">
-        <Sidebar />
-        <div className="flex flex-1 flex-col overflow-hidden min-w-0">
-          <TopBar />
-          <MainArea />
-        </div>
-      </div>
-      <ToastContainer />
-    </ToastProvider>
+    <ThemeProvider>
+      <SidebarProvider>
+        <ToastProvider>
+          <div className="flex h-screen w-screen overflow-hidden bg-slate-50 font-sans text-slate-900 transition-colors dark:bg-slate-950 dark:text-slate-100">
+            <Sidebar />
+            <div className="flex flex-1 flex-col overflow-hidden min-w-0">
+              <TopBar />
+              <MainArea />
+            </div>
+          </div>
+          <ToastContainer />
+        </ToastProvider>
+      </SidebarProvider>
+    </ThemeProvider>
   );
 }

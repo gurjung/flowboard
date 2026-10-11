@@ -75,7 +75,7 @@ export const ListView: React.FC<ListViewProps> = ({
       data-testid="task-list-view"
       className="flex flex-1 flex-col h-full min-h-0 overflow-hidden"
     >
-      <div className="flex-1 overflow-auto rounded-card border border-slate-200 bg-white">
+      <div className="flex-1 overflow-auto rounded-card border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
         <table
           data-testid="task-list-table"
           className="w-full border-collapse text-left"
@@ -85,7 +85,7 @@ export const ListView: React.FC<ListViewProps> = ({
             onSortChange={handleSortChange}
           />
 
-          <tbody className="divide-y divide-slate-100 bg-white">
+          <tbody className="divide-y divide-slate-100 bg-white dark:divide-slate-800 dark:bg-slate-900">
             {sortedTasks.map((task) => (
               <TaskTableRow
                 key={task.id}
@@ -103,7 +103,7 @@ export const ListView: React.FC<ListViewProps> = ({
         {sortedTasks.length === 0 && !isAdding && (
           <div
             data-testid="empty-list-view"
-            className="flex flex-col items-center justify-center p-12 text-center text-xs text-slate-400"
+            className="flex flex-col items-center justify-center p-12 text-center text-xs text-slate-400 dark:text-slate-500"
           >
             {canEdit ? 'No tasks yet' : 'No tasks in this list'}
           </div>
@@ -124,9 +124,9 @@ export const ListView: React.FC<ListViewProps> = ({
               type="button"
               onClick={handleAddClick}
               data-testid="list-add-task-btn"
-              className="inline-flex items-center gap-1.5 rounded-card border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 shadow-subtle hover:bg-slate-50 hover:text-slate-900 transition-colors"
+              className="inline-flex items-center gap-1.5 rounded-card border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 shadow-subtle hover:bg-slate-50 hover:text-slate-900 transition-colors dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 dark:hover:text-white"
             >
-              <Plus className="h-3.5 w-3.5 text-slate-500" />
+              <Plus className="h-3.5 w-3.5 text-slate-500 dark:text-slate-400" />
               Add task
             </button>
           )}

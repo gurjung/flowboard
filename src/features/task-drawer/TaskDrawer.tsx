@@ -12,6 +12,8 @@ import { TaskDrawerHeader } from './TaskDrawerHeader';
 import { TaskDrawerBody } from './TaskDrawerBody';
 import { TaskDrawerFooter } from './TaskDrawerFooter';
 
+import { useDrawerFocusRestore } from './useDrawerFocusRestore';
+
 export interface TaskDrawerProps {
   taskId: string | null;
   initialListId?: string;
@@ -35,27 +37,9 @@ export const TaskDrawer: React.FC<TaskDrawerProps> = ({
 
   const titleInputRef = useRef<HTMLInputElement>(null);
   const closeBtnRef = useRef<HTMLButtonElement>(null);
-  const triggerElementRef = useRef<HTMLElement | null>(null);
 
-  // Focus restore
-  useEffect(() => {
-    if (isOpen) {
-      triggerElementRef.current = document.activeElement as HTMLElement | null;
-    } else if (triggerElementRef.current) {
-      const trigger = triggerElementRef.current;
-      triggerElementRef.current = null;
-      setTimeout(() => {
-        if (trigger && document.contains(trigger)) {
-          trigger.focus();
-        } else {
-          const mainHeading = document.querySelector(
-            'main h1'
-          ) as HTMLElement | null;
-          mainHeading?.focus();
-        }
-      }, 0);
-    }
-  }, [isOpen]);
+  // Focus restore on open/close
+  useDrawerFocusRestore(isOpen);
 
   const taskResult = taskId ? selectTaskById(store, taskId) : null;
   const currentTask = taskResult?.success ? taskResult.data : null;
@@ -124,11 +108,15 @@ export const TaskDrawer: React.FC<TaskDrawerProps> = ({
       initialFocus={canEdit ? titleInputRef : closeBtnRef}
       className="relative z-50"
     >
-      <DialogBackdrop className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs transition-opacity duration-200" />
+      <DialogBackdrop
+        data-testid="task-drawer-backdrop"
+        onClick={onClose}
+        className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs transition-opacity duration-200"
+      />
       <div className="fixed inset-0 overflow-y-auto p-4 flex min-h-full items-center justify-center">
         <DialogPanel
           data-testid="task-drawer"
-          className="w-full max-w-lg transform overflow-hidden rounded-xl bg-white text-left shadow-2xl transition-all border border-slate-200 flex flex-col max-h-[90vh]"
+          className="w-full max-w-lg transform overflow-hidden rounded-xl bg-white text-left shadow-2xl transition-all border border-slate-200 flex flex-col max-h-[90vh] dark:bg-slate-900 dark:border-slate-800 dark:text-slate-100"
         >
           <TaskDrawerHeader
             mode={mode}

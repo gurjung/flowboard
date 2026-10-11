@@ -129,7 +129,7 @@ export function createSeedState(): SeedState {
       listId: 'list-1',
       name: 'To Do',
       category: 'todo',
-      color: '#64748b',
+      color: 'slate',
       position: 0,
     },
     'status-1-prog': {
@@ -137,7 +137,7 @@ export function createSeedState(): SeedState {
       listId: 'list-1',
       name: 'In Progress',
       category: 'in_progress',
-      color: '#2563eb',
+      color: 'blue',
       position: 1,
     },
     'status-1-qa': {
@@ -153,7 +153,7 @@ export function createSeedState(): SeedState {
       listId: 'list-1',
       name: 'Done',
       category: 'done',
-      color: '#16a34a',
+      color: 'green',
       position: 3,
     },
     // List 2 statuses
@@ -162,7 +162,7 @@ export function createSeedState(): SeedState {
       listId: 'list-2',
       name: 'Open',
       category: 'todo',
-      color: '#64748b',
+      color: 'slate',
       position: 0,
     },
     'status-2-prog': {
@@ -170,7 +170,7 @@ export function createSeedState(): SeedState {
       listId: 'list-2',
       name: 'Investigating',
       category: 'in_progress',
-      color: '#2563eb',
+      color: 'blue',
       position: 1,
     },
     'status-2-done': {
@@ -178,7 +178,7 @@ export function createSeedState(): SeedState {
       listId: 'list-2',
       name: 'Resolved',
       category: 'done',
-      color: '#16a34a',
+      color: 'green',
       position: 2,
     },
     // List 3 statuses
@@ -187,7 +187,7 @@ export function createSeedState(): SeedState {
       listId: 'list-3',
       name: 'Reported',
       category: 'todo',
-      color: '#64748b',
+      color: 'slate',
       position: 0,
     },
     'status-3-prog': {
@@ -195,7 +195,7 @@ export function createSeedState(): SeedState {
       listId: 'list-3',
       name: 'Patching',
       category: 'in_progress',
-      color: '#2563eb',
+      color: 'blue',
       position: 1,
     },
     'status-3-done': {
@@ -203,7 +203,7 @@ export function createSeedState(): SeedState {
       listId: 'list-3',
       name: 'Patched',
       category: 'done',
-      color: '#16a34a',
+      color: 'green',
       position: 2,
     },
   };

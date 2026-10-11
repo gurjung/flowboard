@@ -52,15 +52,15 @@ export const TaskCard: React.FC<TaskCardProps> = ({
       onPointerDown={handlePointerDown}
       onClick={handleClick}
       onKeyDown={handleKeyDown}
-      className={`group relative rounded-card border bg-white p-3.5 shadow-card transition-all ${
+      className={`group relative rounded-card border bg-white p-3.5 shadow-card transition-all dark:bg-slate-800/90 ${
         isDragging
           ? 'rotate-1 border-brand-500 shadow-xl opacity-90'
-          : 'border-slate-200 hover:border-slate-300 hover:shadow-subtle'
+          : 'border-slate-200 hover:border-slate-300 hover:shadow-subtle dark:border-slate-700/80 dark:hover:border-slate-600'
       } ${
         canEdit ? 'cursor-grab active:cursor-grabbing' : 'cursor-default'
-      } focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500`}
+      } focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 dark:focus-visible:ring-brand-400`}
     >
-      <h4 className="text-sm font-medium text-slate-900 leading-snug break-words">
+      <h4 className="text-sm font-medium text-slate-900 leading-snug break-words dark:text-slate-100">
         {task.title}
       </h4>
 
@@ -72,8 +72,8 @@ export const TaskCard: React.FC<TaskCardProps> = ({
             <span
               className={`inline-flex items-center gap-1 rounded border px-1.5 py-0.5 font-medium ${
                 formattedDue.isOverdue
-                  ? 'border-red-200 bg-red-50 text-red-700'
-                  : 'border-slate-200 bg-slate-50 text-slate-600'
+                  ? 'border-red-200 bg-red-50 text-red-700 dark:border-red-800 dark:bg-red-950/40 dark:text-red-300'
+                  : 'border-slate-200 bg-slate-50 text-slate-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300'
               }`}
             >
               {formattedDue.isOverdue ? (

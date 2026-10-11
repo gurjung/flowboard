@@ -22,7 +22,7 @@ export const EmptyContainerState: React.FC<EmptyContainerStateProps> = ({
 
   return (
     <div
-      className={`flex items-center justify-between py-1 pr-2 text-xs text-slate-400 italic ${paddingClass}`}
+      className={`flex items-center justify-between py-1 pr-2 text-xs text-slate-400 italic dark:text-slate-500 ${paddingClass}`}
       data-testid={`empty-state-${nodeId}`}
     >
       {isAdmin ? (
@@ -32,7 +32,7 @@ export const EmptyContainerState: React.FC<EmptyContainerStateProps> = ({
             <button
               type="button"
               onClick={onOpenCreate}
-              className="flex items-center gap-0.5 rounded px-1.5 py-0.5 text-[11px] font-medium not-italic text-indigo-600 hover:bg-indigo-50"
+              className="flex items-center gap-0.5 rounded px-1.5 py-0.5 text-[11px] font-medium not-italic text-indigo-600 hover:bg-indigo-50 dark:text-indigo-400 dark:hover:bg-indigo-950/50"
             >
               <Plus className="h-3 w-3" />
               <span>Add</span>

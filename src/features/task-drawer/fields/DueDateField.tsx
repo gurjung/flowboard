@@ -40,21 +40,23 @@ export const DueDateField: React.FC<DueDateFieldProps> = ({
   if (!canEdit) {
     return (
       <div className="flex items-center gap-2">
-        <span className="text-xs font-medium text-slate-500 w-24">
+        <span className="text-xs font-medium text-slate-500 w-24 dark:text-slate-400">
           Due date
         </span>
         {formatted ? (
           <span
             className={`text-xs font-medium px-2 py-0.5 rounded-sm ${
               formatted.isOverdue
-                ? 'bg-rose-50 text-rose-700'
-                : 'bg-slate-100 text-slate-700'
+                ? 'bg-rose-50 text-rose-700 dark:bg-rose-950/40 dark:text-rose-300'
+                : 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-200'
             }`}
           >
             {formatted.label}
           </span>
         ) : (
-          <span className="text-xs text-slate-400 italic">No due date</span>
+          <span className="text-xs text-slate-400 italic dark:text-slate-500">
+            No due date
+          </span>
         )}
       </div>
     );
@@ -65,7 +67,7 @@ export const DueDateField: React.FC<DueDateFieldProps> = ({
       <div className="flex items-center gap-2">
         <label
           htmlFor="drawer-due-date-input"
-          className="text-xs font-medium text-slate-500 w-24 flex items-center gap-1"
+          className="text-xs font-medium text-slate-500 w-24 flex items-center gap-1 dark:text-slate-400"
         >
           <Calendar className="w-3.5 h-3.5 text-slate-400" />
           Due date
@@ -78,14 +80,14 @@ export const DueDateField: React.FC<DueDateFieldProps> = ({
             min={todayStr}
             value={inputValue}
             onChange={handleInputChange}
-            className="text-xs rounded-md border border-slate-200 bg-white px-2 py-1 text-slate-800 shadow-xs focus:border-indigo-500 focus:outline-hidden"
+            className="text-xs rounded-md border border-slate-200 bg-white px-2 py-1 text-slate-800 shadow-xs focus:border-indigo-500 focus:outline-hidden dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
           />
           {dueDate && (
             <button
               type="button"
               data-testid="drawer-due-date-clear-btn"
               onClick={handleClear}
-              className="p-1 text-slate-400 hover:text-slate-600 rounded-md hover:bg-slate-100"
+              className="p-1 text-slate-400 hover:text-slate-600 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 dark:hover:text-slate-200"
               title="Clear due date"
               aria-label="Clear due date"
             >
@@ -93,14 +95,16 @@ export const DueDateField: React.FC<DueDateFieldProps> = ({
             </button>
           )}
           {formatted?.isOverdue && (
-            <span className="text-[10px] font-semibold text-rose-600 bg-rose-50 border border-rose-200 px-1.5 py-0.5 rounded-sm">
+            <span className="text-[10px] font-semibold text-rose-600 bg-rose-50 border border-rose-200 px-1.5 py-0.5 rounded-sm dark:bg-rose-950/40 dark:text-rose-300 dark:border-rose-800">
               Overdue
             </span>
           )}
         </div>
       </div>
       {error && (
-        <p className="text-xs text-rose-600 font-medium pl-24">{error}</p>
+        <p className="text-xs text-rose-600 font-medium pl-24 dark:text-rose-400">
+          {error}
+        </p>
       )}
     </div>
   );

@@ -142,4 +142,26 @@ describe('TaskDetailDrawer Flow & Lifecycle Tests (Feedback Amendments)', () => 
 
     expect(document.activeElement).toBe(card);
   });
+
+  it('returns focus to List view trigger button when modal closes', async () => {
+    render(<App />);
+
+    // Switch to List view
+    const listToggle = screen.getByTestId('view-toggle-list');
+    fireEvent.click(listToggle);
+
+    const titleBtn = screen.getByTestId('task-row-title-task-1');
+    titleBtn.focus();
+    fireEvent.click(titleBtn);
+
+    await screen.findByTestId('task-drawer');
+
+    fireEvent.click(screen.getByTestId('drawer-close-btn'));
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('task-drawer')).not.toBeInTheDocument();
+    });
+
+    expect(document.activeElement).toBe(titleBtn);
+  });
 });

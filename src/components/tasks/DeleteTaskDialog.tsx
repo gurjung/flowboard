@@ -53,16 +53,18 @@ export const DeleteTaskDialog: React.FC<DeleteTaskDialogProps> = ({
       errorMsg={errorMsg}
     >
       <div className="space-y-3.5">
-        <div className="flex items-start gap-2.5 rounded-lg border border-amber-200 bg-amber-50 p-3 text-xs text-amber-800">
-          <AlertTriangle className="h-4 w-4 shrink-0 text-amber-600 mt-0.5" />
+        <div className="flex items-start gap-2.5 rounded-lg border border-amber-200 bg-amber-50 p-3 text-xs text-amber-800 dark:border-amber-900/60 dark:bg-amber-950/40 dark:text-amber-300">
+          <AlertTriangle className="h-4 w-4 shrink-0 text-amber-600 mt-0.5 dark:text-amber-400" />
           <div>
-            <p className="font-semibold text-slate-800">
+            <p className="font-semibold text-slate-800 dark:text-slate-100">
               Are you sure you want to delete this task?
             </p>
-            <p className="mt-1 font-medium text-slate-700 truncate max-w-xs">
+            <p className="mt-1 font-medium text-slate-700 dark:text-slate-200 truncate max-w-xs">
               &quot;{taskTitle}&quot;
             </p>
-            <p className="mt-1 text-slate-500">This action cannot be undone.</p>
+            <p className="mt-1 text-slate-500 dark:text-slate-400">
+              This action cannot be undone.
+            </p>
           </div>
         </div>
 
@@ -72,7 +74,7 @@ export const DeleteTaskDialog: React.FC<DeleteTaskDialogProps> = ({
             onClick={onClose}
             disabled={isDeleting}
             data-testid={cancelTestId}
-            className="rounded border border-slate-300 px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-50 transition-colors"
+            className="rounded border border-slate-300 px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-50 transition-colors dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
           >
             Cancel
           </button>

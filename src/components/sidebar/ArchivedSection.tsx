@@ -52,17 +52,17 @@ export const ArchivedSection: React.FC = () => {
 
   return (
     <div
-      className="border-t border-slate-200 bg-slate-50/70 p-2 text-xs"
+      className="border-t border-slate-200 bg-slate-50/70 p-2 text-xs dark:border-slate-800 dark:bg-slate-900/70"
       data-testid="archived-section"
     >
       <button
         type="button"
         onClick={() => setIsExpanded(!isExpanded)}
-        className="flex w-full items-center justify-between rounded px-2 py-1 text-slate-600 hover:bg-slate-200/60"
+        className="flex w-full items-center justify-between rounded px-2 py-1 text-slate-600 hover:bg-slate-200/60 dark:text-slate-400 dark:hover:bg-slate-800"
         data-testid="toggle-archived-section"
       >
         <div className="flex items-center gap-1.5 font-medium">
-          <Archive className="h-3.5 w-3.5 text-slate-500" />
+          <Archive className="h-3.5 w-3.5 text-slate-500 dark:text-slate-400" />
           <span>Archived Items ({archivedRoots.length})</span>
         </div>
         {isExpanded ? (
@@ -76,7 +76,7 @@ export const ArchivedSection: React.FC = () => {
         <div className="mt-2 space-y-1">
           {errorMsg && (
             <div
-              className="flex items-center gap-1 rounded bg-rose-50 p-1.5 text-[11px] text-rose-700"
+              className="flex items-center gap-1 rounded bg-rose-50 p-1.5 text-[11px] text-rose-700 dark:bg-rose-950/40 dark:text-rose-300 dark:border dark:border-rose-800"
               data-testid="archived-error"
             >
               <AlertCircle className="h-3 w-3 shrink-0" />
@@ -85,23 +85,23 @@ export const ArchivedSection: React.FC = () => {
           )}
 
           {archivedRoots.length === 0 ? (
-            <p className="px-2 py-1 text-[11px] text-slate-400 italic">
+            <p className="px-2 py-1 text-[11px] text-slate-400 italic dark:text-slate-500">
               No archived containers
             </p>
           ) : (
             archivedRoots.map((node) => (
               <div
                 key={node.id}
-                className="flex items-center justify-between rounded border border-slate-200 bg-white px-2 py-1 shadow-2xs"
+                className="flex items-center justify-between rounded border border-slate-200 bg-white px-2 py-1 shadow-2xs dark:border-slate-700 dark:bg-slate-800"
                 data-testid={`archived-item-${node.id}`}
               >
                 <div className="flex items-center justify-between gap-1">
                   <span
-                    className="truncate font-medium text-slate-700"
+                    className="truncate font-medium text-slate-700 dark:text-slate-200"
                     title={node.name}
                   >
                     {node.name}
-                    <span className="ml-1.5 text-[10px] text-slate-400 uppercase tracking-wider">
+                    <span className="ml-1.5 text-[10px] text-slate-400 uppercase tracking-wider dark:text-slate-500">
                       {node.type}
                     </span>
                   </span>
@@ -112,7 +112,7 @@ export const ArchivedSection: React.FC = () => {
                   onClick={() => handleRestore(node)}
                   data-testid={`restore-btn-${node.id}`}
                   title="Restore container"
-                  className="flex items-center gap-1 rounded px-1.5 py-0.5 text-[11px] font-medium text-indigo-600 hover:bg-indigo-50"
+                  className="flex items-center gap-1 rounded px-1.5 py-0.5 text-[11px] font-medium text-indigo-600 hover:bg-indigo-50 dark:text-indigo-400 dark:hover:bg-indigo-950/50"
                 >
                   <RotateCcw className="h-3 w-3" />
                   <span>Restore</span>

@@ -5,8 +5,7 @@ import {
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 import { KanbanColumnData } from '@/domain/resolveDrop';
-import { STATUS_COLOR_MAP } from '@/domain/statusColors';
-import { StatusColorToken } from '@/domain/types';
+import { getStatusStyles } from '@/domain/statusColors';
 import { SortableTaskCard } from './SortableTaskCard';
 import { QuickTaskInput } from './QuickTaskInput';
 import { Plus } from 'lucide-react';
@@ -37,32 +36,30 @@ export const KanbanColumn: React.FC<KanbanColumnProps> = ({
     },
   });
 
-  const colorStyles =
-    STATUS_COLOR_MAP[status.color as StatusColorToken] ||
-    STATUS_COLOR_MAP.slate;
+  const colorStyles = getStatusStyles(status.color, status.category);
 
   return (
     <section
       ref={setNodeRef}
       data-testid={`kanban-column-${status.id}`}
       aria-label={`${status.name} column`}
-      className={`flex w-72 shrink-0 flex-col h-full max-h-full rounded-panel border bg-slate-50/70 p-3 transition-colors ${
+      className={`flex w-72 shrink-0 flex-col h-full max-h-full rounded-panel border bg-slate-50/70 p-3 transition-colors dark:bg-slate-900/60 ${
         isOver
-          ? 'border-brand-400 bg-brand-50/30'
-          : 'border-slate-200/80 hover:border-slate-300'
+          ? 'border-brand-400 bg-brand-50/30 dark:border-brand-500 dark:bg-brand-950/30'
+          : 'border-slate-200/80 hover:border-slate-300 dark:border-slate-800 dark:hover:border-slate-700'
       }`}
     >
       {/* Column Header */}
       <header className="mb-3 shrink-0 flex items-center justify-between px-1">
         <div className="flex items-center gap-2">
           <span className={`h-2.5 w-2.5 rounded-full ${colorStyles.dot}`} />
-          <h3 className="text-xs font-semibold tracking-wide text-slate-800 uppercase">
+          <h3 className="text-xs font-semibold tracking-wide text-slate-800 uppercase dark:text-slate-200">
             {status.name}
           </h3>
         </div>
         <span
           data-testid={`column-count-${status.id}`}
-          className="rounded-full bg-slate-200/80 px-2 py-0.5 text-[11px] font-medium text-slate-600"
+          className={`rounded-full px-2 py-0.5 text-[11px] font-medium ${colorStyles.countBg} ${colorStyles.countText}`}
         >
           {tasks.length}
         </span>
@@ -88,7 +85,7 @@ export const KanbanColumn: React.FC<KanbanColumnProps> = ({
         {tasks.length === 0 && !isCreating && (
           <div
             data-testid={`empty-column-${status.id}`}
-            className="flex flex-1 flex-col items-center justify-center rounded-card border border-dashed border-slate-200 p-6 text-center text-xs text-slate-400"
+            className="flex flex-1 flex-col items-center justify-center rounded-card border border-dashed border-slate-200 p-6 text-center text-xs text-slate-400 dark:border-slate-800 dark:text-slate-500"
           >
             No tasks
           </div>
@@ -116,9 +113,9 @@ export const KanbanColumn: React.FC<KanbanColumnProps> = ({
               }
             }}
             data-testid={`add-task-btn-${status.id}`}
-            className="flex w-full items-center justify-center gap-1.5 rounded-card border border-transparent py-1.5 text-xs font-medium text-slate-600 hover:border-slate-200 hover:bg-white hover:text-slate-900 transition-colors"
+            className="flex w-full items-center justify-center gap-1.5 rounded-card border border-transparent py-1.5 text-xs font-medium text-slate-600 hover:border-slate-200 hover:bg-white hover:text-slate-900 transition-colors dark:text-slate-400 dark:hover:border-slate-700 dark:hover:bg-slate-800 dark:hover:text-slate-100"
           >
-            <Plus className="h-3.5 w-3.5 text-slate-500" />
+            <Plus className="h-3.5 w-3.5 text-slate-500 dark:text-slate-400" />
             Add task
           </button>
         </div>

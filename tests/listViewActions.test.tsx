@@ -42,10 +42,10 @@ describe('ListView Actions Column & 3-Dots Popup Menu (Feedback Item 3)', () => 
     fireEvent.click(editBtn);
     expect(handleOpen).toHaveBeenCalledWith('task-1');
 
-    // Clicking on row title does NOT open edit modal
-    const titleSpan = screen.getByTestId('task-row-title-task-1');
-    fireEvent.click(titleSpan);
-    expect(handleOpen).toHaveBeenCalledTimes(1);
+    // Clicking on row title button opens task modal
+    const titleBtn = screen.getByTestId('task-row-title-task-1');
+    fireEvent.click(titleBtn);
+    expect(handleOpen).toHaveBeenCalledTimes(2);
 
     // Click action button again to open menu for delete
     fireEvent.click(actionBtn);

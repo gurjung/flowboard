@@ -85,7 +85,7 @@ describe('ListView & ViewSwitcher component tests (F9)', () => {
       expect(priorityTh).toHaveAttribute('aria-sort', 'none');
     });
 
-    it('does NOT call onOpenTask on row title click; opens when clicking 3-dots Edit action', () => {
+    it('calls onOpenTask on row title click and on clicking 3-dots Edit action', () => {
       const handleOpen = vi.fn();
       render(
         <ToastProvider>
@@ -93,20 +93,20 @@ describe('ListView & ViewSwitcher component tests (F9)', () => {
         </ToastProvider>
       );
 
-      // Title is rendered as text, not as a button opening the modal
+      // Title is rendered as a button opening the modal
       const task1Title = screen.getByText(
         'Implement token refresh rotation flow'
       );
       expect(task1Title).toBeInTheDocument();
       fireEvent.click(task1Title);
-      expect(handleOpen).not.toHaveBeenCalled();
+      expect(handleOpen).toHaveBeenCalledWith('task-1');
 
       // Open 3 dots menu and click Edit
       const actionBtn = screen.getByTestId('task-actions-task-1');
       fireEvent.click(actionBtn);
       const editBtn = screen.getByRole('menuitem', { name: /edit/i });
       fireEvent.click(editBtn);
-      expect(handleOpen).toHaveBeenCalledWith('task-1');
+      expect(handleOpen).toHaveBeenCalledTimes(2);
     });
 
     it('renders unknown status id gracefully with neutral badge without crashing', () => {
