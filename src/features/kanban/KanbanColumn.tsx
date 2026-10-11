@@ -7,7 +7,7 @@ import {
 import { KanbanColumnData } from '@/domain/resolveDrop';
 import { getStatusStyles } from '@/domain/statusColors';
 import { SortableTaskCard } from './SortableTaskCard';
-import { QuickTaskInput } from './QuickTaskInput';
+import { QuickTaskInput } from '@/components/tasks';
 import { Plus } from 'lucide-react';
 
 export interface KanbanColumnProps {

@@ -1,1 +1,2 @@
-export { MainArea } from './MainArea';
+export { MainArea } from '@/features/main-area';
+export { useListSelectionLoading } from './useListSelectionLoading';

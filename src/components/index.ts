@@ -1,5 +1,5 @@
 export { Sidebar } from './sidebar';
-export { MainArea } from './main-area';
+export { MainArea } from '@/features/main-area';
 export { UserSwitcher } from './sidebar';
 export { ArchivedSection } from './sidebar';
 export { ContainerTree } from './sidebar';

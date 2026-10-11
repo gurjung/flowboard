@@ -42,8 +42,15 @@ export const TaskTableHeader: React.FC<TaskTableHeaderProps> = ({
           scope="col"
           data-testid="th-priority"
           aria-sort={getAriaSort('priority')}
+          tabIndex={0}
           onClick={() => onSortChange('priority')}
-          className="px-3 py-3 w-28 cursor-pointer select-none hover:bg-slate-100 dark:hover:bg-slate-700/60 transition-colors"
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              onSortChange('priority');
+            }
+          }}
+          className="px-3 py-3 w-28 cursor-pointer select-none rounded hover:bg-slate-100 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-1 active:bg-slate-200 dark:hover:bg-slate-700/60 dark:focus-visible:ring-offset-slate-900 dark:active:bg-slate-700 transition-colors"
         >
           <div className="flex items-center gap-1.5">
             <span>Priority</span>
@@ -54,8 +61,15 @@ export const TaskTableHeader: React.FC<TaskTableHeaderProps> = ({
           scope="col"
           data-testid="th-dueDate"
           aria-sort={getAriaSort('dueDate')}
+          tabIndex={0}
           onClick={() => onSortChange('dueDate')}
-          className="px-3 py-3 w-32 cursor-pointer select-none hover:bg-slate-100 dark:hover:bg-slate-700/60 transition-colors"
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              onSortChange('dueDate');
+            }
+          }}
+          className="px-3 py-3 w-32 cursor-pointer select-none rounded hover:bg-slate-100 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-1 active:bg-slate-200 dark:hover:bg-slate-700/60 dark:focus-visible:ring-offset-slate-900 dark:active:bg-slate-700 transition-colors"
         >
           <div className="flex items-center gap-1.5">
             <span>Due date</span>
