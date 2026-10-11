@@ -4,7 +4,6 @@ import { selectVisibleContainerTree } from '@/domain/selectors';
 import { useInitialLoading } from './useInitialLoading';
 import { ContainerTree } from './tree';
 import { ArchivedSection } from './ArchivedSection';
-import { UserSwitcher } from './UserSwitcher';
 
 export const Sidebar: React.FC = () => {
   const state = useFlowboardStore();
@@ -16,17 +15,14 @@ export const Sidebar: React.FC = () => {
       className="flex h-screen w-64 flex-col border-r border-slate-200 bg-slate-50/80 shadow-subtle select-none"
       data-testid="sidebar"
     >
-      {/* Header with Workspace Brand & User Switcher */}
-      <div className="flex flex-col gap-2 border-b border-slate-200 bg-white p-3">
-        <div className="flex items-center justify-between">
-          <span className="text-xs font-bold tracking-tight text-slate-900 uppercase">
-            Flowboard
-          </span>
-          <span className="rounded bg-indigo-50 px-1.5 py-0.5 text-[10px] font-semibold text-indigo-700">
-            SDE 2
-          </span>
-        </div>
-        <UserSwitcher />
+      {/* Header with Workspace Brand */}
+      <div className="flex h-12 shrink-0 items-center justify-between border-b border-slate-200 bg-white px-3">
+        <span className="text-xs font-bold tracking-tight text-slate-900 uppercase">
+          Flowboard
+        </span>
+        <span className="rounded bg-indigo-50 px-1.5 py-0.5 text-[10px] font-semibold text-indigo-700">
+          SDE 2
+        </span>
       </div>
 
       {/* Tree Content (isLoading is cosmetic, never gates data!) */}

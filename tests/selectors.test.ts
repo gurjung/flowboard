@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import {
   selectVisibleContainerTree,
   selectCurrentList,
+  selectBreadcrumbs,
   selectArchivedRoots,
   getDescendantCounts,
   TreeNode,
@@ -357,6 +358,120 @@ describe('Selectors Engine - Container Tree & Current List', () => {
       const counts = getDescendantCounts('folder-1', seed);
       expect(counts.containerCount).toBe(2);
       expect(counts.taskCount).toBe(11);
+    });
+  });
+
+  describe('D-030: selectBreadcrumbs', () => {
+    it('returns exact same reference when inputs are unchanged (reference memoization)', () => {
+      const seed = createSeedState();
+      const crumbs1 = selectBreadcrumbs({
+        ...seed,
+        selectedListId: 'list-1',
+        currentUserId: 'user-alice',
+      });
+      const crumbs2 = selectBreadcrumbs({
+        ...seed,
+        selectedListId: 'list-1',
+        currentUserId: 'user-alice',
+      });
+
+      expect(crumbs1).not.toBeNull();
+      expect(crumbs1).toBe(crumbs2); // Strict reference equality
+    });
+
+    it('returns full 4-tier chain names for Alice viewing list-3 (Acme Corporation -> Product & Engineering -> Security & Compliance -> Vulnerabilities)', () => {
+      const seed = createSeedState();
+      const crumbs = selectBreadcrumbs({
+        ...seed,
+        selectedListId: 'list-3',
+        currentUserId: 'user-alice',
+      });
+
+      expect(crumbs).not.toBeNull();
+      expect(crumbs?.map((c) => c.name)).toEqual([
+        'Acme Corporation',
+        'Product & Engineering',
+        'Security & Compliance',
+        'Vulnerabilities',
+      ]);
+      expect(crumbs?.map((c) => c.type)).toEqual([
+        'workspace',
+        'space',
+        'folder',
+        'list',
+      ]);
+      expect(crumbs?.map((c) => c.id)).toEqual([
+        'ws-1',
+        'space-1',
+        'folder-2',
+        'list-3',
+      ]);
+    });
+
+    it('returns null when user is forbidden (stale Bob on private list-3)', () => {
+      const seed = createSeedState();
+      const crumbs = selectBreadcrumbs({
+        ...seed,
+        selectedListId: 'list-3',
+        currentUserId: 'user-bob',
+      });
+
+      expect(crumbs).toBeNull();
+    });
+
+    it('returns null when user has explicit deny (stale Carol on denied list-2)', () => {
+      const seed = createSeedState();
+      const crumbs = selectBreadcrumbs({
+        ...seed,
+        selectedListId: 'list-2',
+        currentUserId: 'user-carol',
+      });
+
+      expect(crumbs).toBeNull();
+    });
+
+    it('returns null when selected list is archived or has an archived ancestor', () => {
+      const seed = createSeedState();
+      seed.folders['folder-1']!.archivedAt = '2026-10-10T12:00:00.000Z';
+
+      const crumbs = selectBreadcrumbs({
+        ...seed,
+        selectedListId: 'list-1',
+        currentUserId: 'user-alice',
+      });
+
+      expect(crumbs).toBeNull();
+    });
+
+    it('returns null when selectedListId is null', () => {
+      const seed = createSeedState();
+      const crumbs = selectBreadcrumbs({
+        ...seed,
+        selectedListId: null,
+        currentUserId: 'user-alice',
+      });
+
+      expect(crumbs).toBeNull();
+    });
+
+    it('works on deeply frozen state without mutating anything', () => {
+      const seed = createSeedState();
+      Object.freeze(seed);
+      Object.freeze(seed.workspaces);
+      Object.freeze(seed.spaces);
+      Object.freeze(seed.folders);
+      Object.freeze(seed.lists);
+      Object.freeze(seed.users);
+      Object.freeze(seed.grants);
+
+      const crumbs = selectBreadcrumbs({
+        ...seed,
+        selectedListId: 'list-1',
+        currentUserId: 'user-alice',
+      });
+
+      expect(crumbs).not.toBeNull();
+      expect(crumbs?.[3]?.name).toBe('Sprint Backlog');
     });
   });
 });

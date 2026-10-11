@@ -7,7 +7,7 @@ import {
   Task,
 } from './types';
 import { Result, ok, fail } from './result';
-import { canViewNode } from './permissions';
+import { canViewNode, getAncestorChain } from './permissions';
 import { isEffectivelyArchived } from './validation';
 import { sortPositionables } from './ordering';
 
@@ -24,6 +24,12 @@ export interface TreeNode {
 export interface DescendantCounts {
   containerCount: number;
   taskCount: number;
+}
+
+export interface BreadcrumbItem {
+  id: string;
+  name: string;
+  type: ContainerType;
 }
 
 export function getChildType(parentType: ContainerType): ContainerType | null {
@@ -254,6 +260,75 @@ export function selectCurrentList(
   lastListUserId = currentUserId;
   lastSelectedListId = selectedListId;
   cachedCurrentListResult = result;
+
+  return result;
+}
+
+// ============================================================================
+// selectBreadcrumbs
+// ============================================================================
+
+let cachedBreadcrumbsResult: BreadcrumbItem[] | null = null;
+let lastBreadcrumbsNodesRef: Record<string, BaseContainer> | null = null;
+let lastBreadcrumbsGrantsRef: unknown = null;
+let lastBreadcrumbsUsersRef: unknown = null;
+let lastBreadcrumbsUserId: string | null = null;
+let lastBreadcrumbsSelectedListId: string | null = null;
+
+/**
+ * Builds breadcrumb chain only from a successful selectCurrentList.
+ * D-012 Invariant: A partial sub-path cannot occur because any accessible
+ * leaf list guarantees that all private ancestors have explicit allow grants
+ * and no ancestor has an explicit deny grant. The chain is all-or-nothing.
+ *
+ * Memoized on references of (nodes, grants, users, currentUserId, selectedListId).
+ * Same inputs -> same returned BreadcrumbItem[] reference.
+ */
+export function selectBreadcrumbs(
+  state: StateSubsetForList
+): BreadcrumbItem[] | null {
+  const allNodes = getAllNodes(state);
+  const grants = state.grants;
+  const users = state.users;
+  const currentUserId = state.currentUserId;
+  const selectedListId = state.selectedListId;
+
+  if (
+    lastBreadcrumbsNodesRef !== null &&
+    areNodesReferenceEqual(lastBreadcrumbsNodesRef, allNodes) &&
+    lastBreadcrumbsGrantsRef === grants &&
+    lastBreadcrumbsUsersRef === users &&
+    lastBreadcrumbsUserId === currentUserId &&
+    lastBreadcrumbsSelectedListId === selectedListId
+  ) {
+    return cachedBreadcrumbsResult;
+  }
+
+  const listResult = selectCurrentList(state);
+  let result: BreadcrumbItem[] | null = null;
+
+  if (listResult.success && listResult.data) {
+    const permState = {
+      nodes: allNodes,
+      grants: Array.isArray(grants) ? grants : Object.values(grants),
+    };
+    const chain = getAncestorChain(listResult.data.id, permState);
+    if (chain) {
+      result = chain.map((node) => ({
+        id: node.id,
+        name: node.name,
+        type: node.type,
+      }));
+    }
+  }
+
+  // Update memoization cache
+  lastBreadcrumbsNodesRef = allNodes;
+  lastBreadcrumbsGrantsRef = grants;
+  lastBreadcrumbsUsersRef = users;
+  lastBreadcrumbsUserId = currentUserId;
+  lastBreadcrumbsSelectedListId = selectedListId;
+  cachedBreadcrumbsResult = result;
 
   return result;
 }

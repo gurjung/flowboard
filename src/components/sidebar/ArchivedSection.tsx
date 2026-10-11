@@ -10,11 +10,14 @@ import {
   ChevronRight,
 } from 'lucide-react';
 
+import { useToast } from '@/components/toasts';
+
 export const ArchivedSection: React.FC = () => {
   const state = useFlowboardStore();
   const currentUserId = useFlowboardStore((s) => s.currentUserId);
   const users = useFlowboardStore((s) => s.users);
   const restoreContainer = useFlowboardStore((s) => s.restoreContainer);
+  const toast = useToast();
 
   const [isExpanded, setIsExpanded] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -30,10 +33,19 @@ export const ArchivedSection: React.FC = () => {
   // selectArchivedRoots lists archived nodes whose ancestors are all active (D-028)
   const archivedRoots = selectArchivedRoots(state);
 
-  const handleRestore = async (id: string) => {
+  const handleRestore = async (node: { id: string; name: string }) => {
     setErrorMsg(null);
-    const result = await restoreContainer(id);
-    if (!result.success) {
+    const callUserId = currentUserId;
+    const result = await restoreContainer(node.id);
+
+    // If user changed while awaiting latency, ignore result (Rule 2)
+    if (callUserId !== useFlowboardStore.getState().currentUserId) {
+      return;
+    }
+
+    if (result.success) {
+      toast.success(`Restored '${node.name}' successfully.`);
+    } else {
       setErrorMsg(result.error.message);
     }
   };
@@ -97,7 +109,7 @@ export const ArchivedSection: React.FC = () => {
 
                 <button
                   type="button"
-                  onClick={() => handleRestore(node.id)}
+                  onClick={() => handleRestore(node)}
                   data-testid={`restore-btn-${node.id}`}
                   title="Restore container"
                   className="flex items-center gap-1 rounded px-1.5 py-0.5 text-[11px] font-medium text-indigo-600 hover:bg-indigo-50"

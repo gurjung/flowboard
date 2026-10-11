@@ -29,7 +29,8 @@ describe('Sidebar Component & Permission Switching', () => {
     expect(screen.queryByText('Vulnerabilities')).not.toBeInTheDocument();
 
     // Public Core Platform and Sprint Backlog must remain visible
-    expect(screen.getByText('Core Platform')).toBeInTheDocument();
+    expect(screen.getByTestId('tree-row-folder-1')).toBeInTheDocument();
+    expect(screen.getAllByText('Core Platform').length).toBeGreaterThan(0);
     expect(screen.getByTestId('tree-row-list-1')).toBeInTheDocument();
   });
 

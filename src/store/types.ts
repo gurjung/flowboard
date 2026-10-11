@@ -32,6 +32,7 @@ export interface SessionSlice {
   setCurrentUser: (userId: string) => Result<User>;
   setSelectedList: (listId: string | null) => Result<void>;
   selectList: (listId: string) => Result<List>;
+  clearSelection: () => Result<void>;
 }
 
 export interface ContainerSyncSlice {

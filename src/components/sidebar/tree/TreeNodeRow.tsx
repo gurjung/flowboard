@@ -16,6 +16,8 @@ import {
   Lock,
 } from 'lucide-react';
 
+import { useToast } from '@/components/toasts';
+
 interface TreeRowProps {
   node: TreeNode;
   depth: number;
@@ -56,9 +58,14 @@ export const TreeRow: React.FC<TreeRowProps> = ({
   const isFirst = currentIndex <= 0;
   const isLast = currentIndex === siblings.length - 1;
 
+  const toast = useToast();
+
   const handleRowClick = () => {
     if (node.type === 'list') {
-      selectList(node.id);
+      const result = selectList(node.id);
+      if (!result.success) {
+        toast.error(result.error.message);
+      }
     } else {
       onToggleExpand(node.id);
     }
@@ -91,6 +98,7 @@ export const TreeRow: React.FC<TreeRowProps> = ({
       <div
         data-testid={`tree-row-${node.id}`}
         onClick={handleRowClick}
+        aria-selected={node.type === 'list' ? isSelected : undefined}
         className={`flex cursor-pointer items-center justify-between rounded py-1 pr-1.5 text-xs transition-colors ${paddingClass} ${
           isSelected
             ? 'border-l-2 border-indigo-600 bg-indigo-50/80 font-semibold text-indigo-900'

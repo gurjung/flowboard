@@ -11,13 +11,19 @@ import {
   Archive,
 } from 'lucide-react';
 
+import { useToast } from '@/components/toasts';
+import { Result } from '@/domain/result';
+
 interface NodeActionMenuProps {
   node: TreeNode;
   childType: ContainerType | null;
   currentIndex: number;
   isFirst: boolean;
   isLast: boolean;
-  reorderContainer: (id: string, newIndex: number) => void;
+  reorderContainer: (
+    id: string,
+    newIndex: number
+  ) => Promise<Result<void>> | Result<void>;
   onOpenCreate: () => void;
   onOpenRename: () => void;
   onOpenArchive: () => void;
@@ -34,6 +40,14 @@ export const NodeActionMenu: React.FC<NodeActionMenuProps> = ({
   onOpenRename,
   onOpenArchive,
 }) => {
+  const toast = useToast();
+
+  const handleMove = async (newIndex: number) => {
+    const result = await reorderContainer(node.id, newIndex);
+    if (result && !result.success) {
+      toast.error(result.error.message);
+    }
+  };
   return (
     <div
       className="opacity-0 group-hover:opacity-100 focus-within:opacity-100"
@@ -90,7 +104,7 @@ export const NodeActionMenu: React.FC<NodeActionMenuProps> = ({
                   <button
                     type="button"
                     disabled={disabled}
-                    onClick={() => reorderContainer(node.id, currentIndex - 1)}
+                    onClick={() => handleMove(currentIndex - 1)}
                     data-testid={`menu-move-up-${node.id}`}
                     className={`flex w-full items-center gap-2 px-3 py-1.5 text-left text-xs ${
                       disabled
@@ -111,7 +125,7 @@ export const NodeActionMenu: React.FC<NodeActionMenuProps> = ({
                   <button
                     type="button"
                     disabled={disabled}
-                    onClick={() => reorderContainer(node.id, currentIndex + 1)}
+                    onClick={() => handleMove(currentIndex + 1)}
                     data-testid={`menu-move-down-${node.id}`}
                     className={`flex w-full items-center gap-2 px-3 py-1.5 text-left text-xs ${
                       disabled

@@ -89,4 +89,9 @@ export const createSessionSlice = (
     set(() => ({ selectedListId: listId }));
     return ok(node as List);
   },
+
+  clearSelection: () => {
+    set(() => ({ selectedListId: null }));
+    return ok(undefined);
+  },
 });
