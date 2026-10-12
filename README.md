@@ -15,3 +15,7 @@ A modern, high-performance project management web application built with React, 
 - **Dark Mode Directive**: Configured via `@custom-variant dark (&:where(.dark, .dark *));` in `src/index.css` (deliberate amendment to D-007 for selector-based dark theme compilation under `@tailwindcss/vite` v4).
 - **Theme Foundation**: `ThemeProvider` with Light / Dark / System modes and zero flash-of-wrong-theme (FOWT) `<script>` in `index.html`.
 - **Responsive Shell**: Collapsible sidebar with accessible `inert` and `aria-hidden` attributes, plus a slide-over mobile drawer below 768px with backdrop and `Escape` key dismissal.
+
+## Stretch Goals Attempted
+
+- **Client-Side Search on Task Title & Description**: Real-time client-side search filtering across both Kanban board and List views with instant substring matching across task titles and descriptions, keyboard shortcut (`/` to focus, `Escape` to clear), clear trigger button, and search-aware empty states.

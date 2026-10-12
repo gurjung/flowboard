@@ -9,28 +9,29 @@ import {
 } from '@/domain/taskSorting';
 import { TaskTableHeader } from './TaskTableHeader';
 import { TaskTableRow } from './TaskTableRow';
-import { QuickTaskInput, DeleteTaskDialog } from '@/components/tasks';
+import { DeleteTaskDialog } from '@/components/tasks';
 import { useToast } from '@/components/toasts';
-import { Plus } from 'lucide-react';
 import { Status, Task } from '@/domain/types';
+import { filterTasksByQuery } from '@/domain/taskSearch';
 
 export interface ListViewProps {
   listId: string;
   canEdit?: boolean;
   onOpenTask?: (taskId: string) => void;
   onOpenCreateTask?: (statusId?: string) => void;
+  searchQuery?: string;
 }
 
 export const ListView: React.FC<ListViewProps> = ({
   listId,
   canEdit = true,
   onOpenTask,
-  onOpenCreateTask,
+  onOpenCreateTask: _onOpenCreateTask,
+  searchQuery,
 }) => {
   const state = useFlowboardStore();
   const toast = useToast();
   const [sortConfig, setSortConfig] = useState<SortConfig | null>(null);
-  const [isAdding, setIsAdding] = useState(false);
   const [taskToDelete, setTaskToDelete] = useState<Task | null>(null);
 
   const tasksRes = selectTasksForList(state, listId);
@@ -45,29 +46,15 @@ export const ListView: React.FC<ListViewProps> = ({
     }, {});
   }, [statusesRes]);
 
-  // Default todo status for task creation
-  const defaultTodoStatus = useMemo(() => {
-    const list = statusesRes.success ? statusesRes.data : [];
-    const todoStatuses = list.filter((s) => s.category === 'todo');
-    return todoStatuses.sort((a, b) => a.position - b.position)[0] ?? list[0];
-  }, [statusesRes]);
-
-  // Pure in-component sorting via useMemo (D-053)
+  // Pure in-component sorting & search filtering via useMemo (D-053)
   const sortedTasks = useMemo(() => {
     const list = tasksRes.success ? tasksRes.data : [];
-    return sortTasksForListView(list, sortConfig, statusesRecord);
-  }, [tasksRes, sortConfig, statusesRecord]);
+    const filtered = filterTasksByQuery(list, searchQuery);
+    return sortTasksForListView(filtered, sortConfig, statusesRecord);
+  }, [tasksRes, searchQuery, sortConfig, statusesRecord]);
 
   const handleSortChange = (key: SortKey) => {
     setSortConfig((prev) => nextSort(prev, key));
-  };
-
-  const handleAddClick = () => {
-    if (onOpenCreateTask) {
-      onOpenCreateTask(defaultTodoStatus?.id);
-    } else {
-      setIsAdding(true);
-    }
   };
 
   return (
@@ -100,38 +87,19 @@ export const ListView: React.FC<ListViewProps> = ({
         </table>
 
         {/* Role-Aware Empty State (F9 Gate 7) */}
-        {sortedTasks.length === 0 && !isAdding && (
+        {sortedTasks.length === 0 && (
           <div
             data-testid="empty-list-view"
             className="flex flex-col items-center justify-center p-12 text-center text-xs text-slate-400 dark:text-slate-500"
           >
-            {canEdit ? 'No tasks yet' : 'No tasks in this list'}
+            {searchQuery?.trim()
+              ? `No tasks matching "${searchQuery.trim()}"`
+              : canEdit
+                ? 'No tasks yet'
+                : 'No tasks in this list'}
           </div>
         )}
       </div>
-
-      {/* Task Creation Trigger */}
-      {canEdit && defaultTodoStatus && (
-        <div className="mt-3 shrink-0">
-          {isAdding && !onOpenCreateTask ? (
-            <QuickTaskInput
-              listId={listId}
-              statusId={defaultTodoStatus.id}
-              onClose={() => setIsAdding(false)}
-            />
-          ) : (
-            <button
-              type="button"
-              onClick={handleAddClick}
-              data-testid="list-add-task-btn"
-              className="inline-flex items-center gap-1.5 rounded-card border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 shadow-subtle hover:bg-slate-50 hover:text-slate-900 transition-colors dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 dark:hover:text-white"
-            >
-              <Plus className="h-3.5 w-3.5 text-slate-500 dark:text-slate-400" />
-              Add task
-            </button>
-          )}
-        </div>
-      )}
 
       {/* Delete Task Warning/Confirmation Modal */}
       <DeleteTaskDialog

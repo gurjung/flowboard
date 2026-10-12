@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { DndContext, DragOverlay, closestCorners } from '@dnd-kit/core';
 import { useFlowboardStore } from '@/store/useFlowboardStore';
 import {
   selectKanbanColumns,
   selectCanEditCurrentList,
 } from '@/domain/selectors';
+import { filterTasksByQuery } from '@/domain/taskSearch';
 import { KanbanColumn } from './KanbanColumn';
 import { TaskCard } from './TaskCard';
 import { useKanbanDnd } from './useKanbanDnd';
@@ -12,18 +13,27 @@ import { useKanbanDnd } from './useKanbanDnd';
 export interface KanbanBoardProps {
   onOpenTask?: (taskId: string) => void;
   onOpenCreateTask?: (statusId: string) => void;
+  searchQuery?: string;
 }
 
 export const KanbanBoard: React.FC<KanbanBoardProps> = ({
   onOpenTask,
   onOpenCreateTask,
+  searchQuery,
 }) => {
   const state = useFlowboardStore();
   const selectedListId = useFlowboardStore((s) => s.selectedListId);
   const canEdit = selectCanEditCurrentList(state);
   const columnsRes = selectKanbanColumns(state);
 
-  const columns = columnsRes.success ? columnsRes.data : [];
+  const columns = useMemo(() => {
+    const rawColumns = columnsRes.success ? columnsRes.data : [];
+    if (!searchQuery?.trim()) return rawColumns;
+    return rawColumns.map((col) => ({
+      ...col,
+      tasks: filterTasksByQuery(col.tasks, searchQuery),
+    }));
+  }, [columnsRes, searchQuery]);
 
   const {
     activeTask,

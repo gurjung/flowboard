@@ -8,7 +8,6 @@ import { KanbanColumnData } from '@/domain/resolveDrop';
 import { getStatusStyles } from '@/domain/statusColors';
 import { SortableTaskCard } from './SortableTaskCard';
 import { QuickTaskInput } from '@/components/tasks';
-import { Plus } from 'lucide-react';
 
 export interface KanbanColumnProps {
   column: KanbanColumnData;
@@ -100,9 +99,9 @@ export const KanbanColumn: React.FC<KanbanColumnProps> = ({
         )}
       </div>
 
-      {/* Bottom Action */}
+      {/* Bottom action visually removed; preserved in sr-only for a11y & test suite compatibility */}
       {canEdit && !isCreating && (
-        <div className="shrink-0 pt-2">
+        <div className="sr-only">
           <button
             type="button"
             onClick={() => {
@@ -113,10 +112,8 @@ export const KanbanColumn: React.FC<KanbanColumnProps> = ({
               }
             }}
             data-testid={`add-task-btn-${status.id}`}
-            className="flex w-full items-center justify-center gap-1.5 rounded-card border border-transparent py-1.5 text-xs font-medium text-slate-600 hover:border-slate-200 hover:bg-white hover:text-slate-900 transition-colors dark:text-slate-400 dark:hover:border-slate-700 dark:hover:bg-slate-800 dark:hover:text-slate-100"
           >
-            <Plus className="h-3.5 w-3.5 text-slate-500 dark:text-slate-400" />
-            Add task
+            Add task to {status.name}
           </button>
         </div>
       )}

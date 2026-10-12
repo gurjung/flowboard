@@ -50,9 +50,6 @@ export const Sidebar: React.FC = () => {
             <span className="text-xs font-bold tracking-tight text-slate-900 uppercase dark:text-slate-100">
               Flowboard
             </span>
-            <span className="rounded bg-indigo-50 px-1.5 py-0.5 text-[10px] font-semibold text-indigo-700 dark:bg-indigo-950/60 dark:text-indigo-300">
-              SDE 2
-            </span>
           </div>
 
           {/* Tree Content (isLoading is cosmetic, never gates data!) */}
