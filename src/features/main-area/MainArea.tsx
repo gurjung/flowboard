@@ -5,7 +5,7 @@ import {
   selectCanEditCurrentList,
   selectStatusesForList,
 } from '@/domain/selectors';
-import { useListSelectionLoading } from '@/components/main-area/useListSelectionLoading';
+import { useListSelectionLoading } from './useListSelectionLoading';
 import { KanbanBoard } from '@/features/kanban';
 import { ListView } from '@/features/list-view';
 import { TaskDrawer } from '@/features/task-drawer';
@@ -45,7 +45,6 @@ export const MainArea: React.FC = () => {
     setSearchQuery('');
   }, [selectedListId, currentUserId]);
 
-  // 1. Neutral empty state when selectedListId is null
   if (selectedListId === null) {
     return (
       <main
@@ -65,7 +64,6 @@ export const MainArea: React.FC = () => {
     );
   }
 
-  // 2. Stale or invalid selection (FORBIDDEN, CONFLICT, NOT_FOUND, VALIDATION)
   if (!currentListResult.success) {
     return (
       <main

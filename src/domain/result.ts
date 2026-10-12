@@ -1,21 +1,6 @@
-export type ErrorCode =
-  | 'FORBIDDEN'
-  | 'NOT_FOUND'
-  | 'VALIDATION'
-  | 'INVALID_PARENT'
-  | 'INVALID_STATUS'
-  | 'CONFLICT'
-  | 'INTERNAL';
+import { ErrorCode, DomainError, Result } from '@/types/common.types';
 
-export interface DomainError {
-  code: ErrorCode;
-  message: string;
-  details?: Record<string, unknown>;
-}
-
-export type Result<T> =
-  | { success: true; data: T; error?: never }
-  | { success: false; data?: never; error: DomainError };
+export type { ErrorCode, DomainError, Result };
 
 export function ok<T>(data: T): Result<T> {
   return { success: true, data };

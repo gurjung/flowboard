@@ -9,6 +9,7 @@ import {
 } from '../types';
 import { Task } from '@/domain/types';
 import { Result, fail } from '@/domain/result';
+import { ERROR_MESSAGES } from '@/constants';
 import { executeCreateTask, executeUpdateTask } from './taskOperations';
 import {
   executeChangeTaskStatus,
@@ -63,10 +64,7 @@ export function createTaskSlice(
     createTask: async (input: CreateTaskInput): Promise<Result<Task>> => {
       if (get().simulateFailure) {
         if (latency > 0) await sleep(latency);
-        return fail(
-          'INTERNAL',
-          'Simulated network failure (HTTP 500): Server temporarily unavailable'
-        );
+        return fail('INTERNAL', ERROR_MESSAGES.SIMULATED_FAILURE);
       }
       const res = syncSlice.createTaskSync(input);
       if (latency > 0) await sleep(latency);

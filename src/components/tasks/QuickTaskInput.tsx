@@ -22,7 +22,6 @@ export const QuickTaskInput: React.FC<QuickTaskInputProps> = ({
   const currentUserId = useFlowboardStore((s) => s.currentUserId);
   const initialUserRef = useRef(currentUserId);
 
-  // Auto-focus on mount
   useEffect(() => {
     inputRef.current?.focus();
   }, []);

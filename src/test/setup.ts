@@ -6,7 +6,6 @@ global.ResizeObserver = class ResizeObserver {
   disconnect() {}
 };
 
-// Polyfill window.localStorage in jsdom environment if missing methods
 if (!window.localStorage || typeof window.localStorage.clear !== 'function') {
   let store: Record<string, string> = {};
   const mockStorage = {

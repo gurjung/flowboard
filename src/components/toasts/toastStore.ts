@@ -1,4 +1,5 @@
 import { ToastMessage, ToastStore, ToastType } from './types';
+import { TIMINGS, LIMITS } from '@/constants';
 
 let nextId = 1;
 
@@ -16,13 +17,13 @@ export function createToastStore(): ToastStore {
     const trimmed = message.trim();
     if (!trimmed) return;
 
-    // Dedupe identical consecutive messages
     const lastToast = toasts[toasts.length - 1];
     if (lastToast && lastToast.message === trimmed && lastToast.type === type) {
       return;
     }
 
-    const defaultDuration = type === 'error' ? 8000 : 3000;
+    const defaultDuration =
+      type === 'error' ? TIMINGS.TOAST_ERROR_MS : TIMINGS.TOAST_DEFAULT_MS;
     const finalDuration = durationMs ?? defaultDuration;
 
     const newToast: ToastMessage = {
@@ -32,8 +33,7 @@ export function createToastStore(): ToastStore {
       durationMs: finalDuration,
     };
 
-    // Max 3 stacked toasts: keep last 2 then add new
-    toasts = [...toasts.slice(-2), newToast];
+    toasts = [...toasts.slice(-(LIMITS.MAX_STACKED_TOASTS - 1)), newToast];
     notify();
   };
 

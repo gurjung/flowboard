@@ -6,7 +6,6 @@ export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const toggleButtonRef = useRef<HTMLButtonElement>(null);
 
-  // Read saved desktop collapse preference
   const [isCollapsed, setIsCollapsed] = useState<boolean>(() => {
     try {
       return localStorage.getItem(SIDEBAR_STORAGE_KEY) === 'true';
@@ -24,7 +23,6 @@ export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
-  // Listen to matchMedia for 768px breakpoint
   useEffect(() => {
     if (typeof window === 'undefined' || !window.matchMedia) return;
     const mql = window.matchMedia('(min-width: 768px)');
@@ -32,7 +30,7 @@ export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({
       const mobile = !e.matches;
       setIsMobile(mobile);
       if (!mobile) {
-        setIsMobileOpen(false); // Close overlay when transitioning to desktop
+        setIsMobileOpen(false);
       }
     };
     updateMobile(mql);
@@ -64,7 +62,6 @@ export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({
     toggleButtonRef.current?.focus();
   }, []);
 
-  // Escape key closes mobile overlay
   useEffect(() => {
     if (!isMobile || !isMobileOpen) return;
     const handleKeyDown = (e: KeyboardEvent) => {

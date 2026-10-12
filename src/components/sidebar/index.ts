@@ -1,9 +1,4 @@
-export { Sidebar } from './Sidebar';
-export { UserSwitcher } from '@/features/topbar';
-export { ArchivedSection } from './ArchivedSection';
-export { ContainerTree } from './tree';
-export {
-  CreateContainerDialog,
-  RenameContainerDialog,
-  ArchiveConfirmDialog,
-} from './dialogs';
+/**
+ * Re-exporting Sidebar from features/sidebar for backwards compatibility.
+ */
+export * from '@/features/sidebar';

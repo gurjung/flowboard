@@ -1,4 +1,4 @@
-export { SidebarProvider } from './SidebarProvider';
-export { SidebarContext, SIDEBAR_STORAGE_KEY } from './SidebarContext';
-export type { SidebarContextValue } from './SidebarContext';
-export { useSidebar } from './useSidebar';
+/**
+ * Re-exporting layout & sidebar context from src/context/sidebar for backwards compatibility.
+ */
+export * from '@/context/sidebar';

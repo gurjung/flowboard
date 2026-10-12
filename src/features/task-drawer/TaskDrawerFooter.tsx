@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Trash2, AlertTriangle } from 'lucide-react';
+import { ERROR_MESSAGES, UI_LABELS } from '@/constants';
 
 interface TaskDrawerFooterProps {
   mode: 'create' | 'edit';
@@ -48,7 +49,7 @@ export const TaskDrawerFooter: React.FC<TaskDrawerFooterProps> = ({
     try {
       const success = await onDelete();
       if (!success) {
-        setDeleteError('Failed to delete task. Please try again.');
+        setDeleteError(ERROR_MESSAGES.DELETE_TASK_FAILED);
       }
     } catch {
       setDeleteError('An unexpected error occurred while deleting.');
@@ -143,7 +144,7 @@ export const TaskDrawerFooter: React.FC<TaskDrawerFooterProps> = ({
               disabled={isSaving}
               className="rounded-lg border border-slate-300 bg-white px-3.5 py-2 text-xs font-medium text-slate-700 shadow-xs hover:bg-slate-50 hover:text-slate-900 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 transition-colors"
             >
-              Cancel
+              {UI_LABELS.CANCEL}
             </button>
             <button
               type="button"
@@ -155,8 +156,8 @@ export const TaskDrawerFooter: React.FC<TaskDrawerFooterProps> = ({
               {isSaving
                 ? 'Saving...'
                 : mode === 'create'
-                  ? 'Create Task'
-                  : 'Save Changes'}
+                  ? UI_LABELS.CREATE_TASK
+                  : UI_LABELS.SAVE_CHANGES}
             </button>
           </div>
         </div>

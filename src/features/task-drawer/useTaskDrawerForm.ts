@@ -3,6 +3,7 @@ import { useFlowboardStore } from '@/store/useFlowboardStore';
 import { useToast } from '@/components/toasts';
 import { Task, Status } from '@/domain/types';
 import { isoToDateInput, getLocalTodayDateInput } from '@/domain/dueDate';
+import { TOAST_MESSAGES } from '@/constants';
 
 interface UseTaskDrawerFormParams {
   isOpen: boolean;
@@ -103,7 +104,7 @@ export function useTaskDrawerForm({
           statusId: statusId || statuses[0]?.id || '',
         });
         if (res.success) {
-          toast.success('Task created');
+          toast.success(TOAST_MESSAGES.TASK_CREATED);
           onClose();
         } else {
           toast.error(res.error.message);

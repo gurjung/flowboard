@@ -1,6 +1,7 @@
 import { BaseContainer, ContainerType } from './types';
 import { Result, ok, fail } from './result';
 import { getAncestorChain } from './permissions';
+import { LIMITS, ERROR_MESSAGES } from '@/constants';
 
 export type ArchiveStatus = 'active' | 'archived' | 'corrupt';
 
@@ -10,16 +11,16 @@ export type ArchiveStatus = 'active' | 'archived' | 'corrupt';
  */
 export function validateContainerName(name: string): Result<string> {
   if (typeof name !== 'string') {
-    return fail('VALIDATION', 'Container name must be a string');
+    return fail('VALIDATION', ERROR_MESSAGES.CONTAINER_NAME_INVALID);
   }
 
   const trimmed = name.trim();
   if (trimmed.length < 1) {
-    return fail('VALIDATION', 'Container name cannot be empty');
+    return fail('VALIDATION', ERROR_MESSAGES.CONTAINER_NAME_REQUIRED);
   }
 
-  if (trimmed.length > 100) {
-    return fail('VALIDATION', 'Container name cannot exceed 100 characters');
+  if (trimmed.length > LIMITS.MAX_CONTAINER_NAME_LENGTH) {
+    return fail('VALIDATION', ERROR_MESSAGES.CONTAINER_NAME_TOO_LONG);
   }
 
   return ok(trimmed);

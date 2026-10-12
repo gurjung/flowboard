@@ -53,7 +53,6 @@ export const TaskDrawerBody: React.FC<TaskDrawerBodyProps> = ({
 }) => {
   return (
     <div className="flex-1 overflow-y-auto px-6 py-5 pb-6 space-y-4">
-      {/* 1. Title Field */}
       <div className="flex flex-col gap-1.5">
         <label
           htmlFor="drawer-title-input"
@@ -86,14 +85,12 @@ export const TaskDrawerBody: React.FC<TaskDrawerBodyProps> = ({
         )}
       </div>
 
-      {/* 2. Description Field */}
       <DescriptionField
         description={description}
         canEdit={canEdit}
         onChange={onDescriptionChange}
       />
 
-      {/* 3. 2-Column Grid (Status, Priority, Assignee, Due Date) */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
         <StatusField
           statusId={statusId}

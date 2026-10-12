@@ -80,30 +80,25 @@ export function selectTaskById(
 
   let result: Result<Task>;
 
-  // 1. Raw task existence check
   const task = tasks[id];
   if (!task) {
     result = fail('NOT_FOUND', `Task '${id}' not found`);
   } else if (!canViewNode(currentUser, task.primaryListId, permState)) {
-    // 2. Permission check on list: a deleted task in a denied list reads FORBIDDEN!
+    // Permission check on list: a deleted task in a denied list reads FORBIDDEN
     result = fail('FORBIDDEN', `Access denied to task '${id}'`);
   } else if (allNodes[task.primaryListId]?.type !== 'list') {
-    // 3. Target parent is not a list
     result = fail(
       'VALIDATION',
       `Container '${task.primaryListId}' is not a list`
     );
   } else if (task.archivedAt !== null) {
-    // 4. Deleted task reads as NOT_FOUND
     result = fail('NOT_FOUND', `Task '${id}' not found`);
   } else if (getArchiveStatus(task.primaryListId, allNodes) !== 'active') {
-    // 5. Hierarchy archived or corrupt
     result = fail(
       'CONFLICT',
       'Task belongs to an archived or unavailable list'
     );
   } else {
-    // 6. Success
     result = ok(task);
   }
 

@@ -108,7 +108,6 @@ export function selectStatusById(
     return cached.result;
   }
 
-  // 1. Resolve status first
   const status = state.statuses?.[statusId];
   if (!status) {
     const res = fail<Status>('NOT_FOUND', `Status '${statusId}' not found`);
@@ -125,7 +124,7 @@ export function selectStatusById(
       : Object.values(state.grants ?? {}),
   };
 
-  // 2. Resolve list node and verify view permission (zero-leakage: no name in result)
+  // Zero-leakage: verify view permission before returning status
   const listNode = allNodes[status.listId];
   if (!listNode || !canViewNode(currentUser, status.listId, permState)) {
     const res = fail<Status>('FORBIDDEN', 'Access denied to status list');
@@ -133,7 +132,6 @@ export function selectStatusById(
     return res;
   }
 
-  // 3. Container must be a list
   if (listNode.type !== 'list') {
     const res = fail<Status>(
       'VALIDATION',
@@ -143,7 +141,6 @@ export function selectStatusById(
     return res;
   }
 
-  // 4. Container active
   if (getArchiveStatus(status.listId, allNodes) !== 'active') {
     const res = fail<Status>(
       'CONFLICT',

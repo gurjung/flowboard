@@ -2,6 +2,7 @@ import React from 'react';
 import { useFlowboardStore } from '@/store/useFlowboardStore';
 import { useToast } from '@/components/toasts';
 import { Zap, ZapOff } from 'lucide-react';
+import { TOAST_MESSAGES } from '@/constants';
 
 export const SimulateFailureToggle: React.FC = () => {
   const simulateFailure = useFlowboardStore((s) => s.simulateFailure);
@@ -12,13 +13,9 @@ export const SimulateFailureToggle: React.FC = () => {
     const nextState = !simulateFailure;
     setSimulateFailure(nextState);
     if (nextState) {
-      toast.error(
-        'Simulated API errors enabled (HTTP 500). Mutations will fail & rollback.'
-      );
+      toast.error(TOAST_MESSAGES.SIMULATE_FAILURE_ACTIVE);
     } else {
-      toast.info(
-        'Simulated API errors disabled. Mutations will succeed normally.'
-      );
+      toast.info(TOAST_MESSAGES.SIMULATE_FAILURE_INACTIVE);
     }
   };
 

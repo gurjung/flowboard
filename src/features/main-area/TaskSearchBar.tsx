@@ -1,5 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import { Search, X } from 'lucide-react';
+import { UI_LABELS } from '@/constants';
 
 export interface TaskSearchBarProps {
   value: string;
@@ -54,7 +55,7 @@ export const TaskSearchBar: React.FC<TaskSearchBarProps> = ({
         onChange={(e) => onChange(e.target.value)}
         onKeyDown={handleKeyDown}
         data-testid="task-search-input"
-        placeholder="search tasks"
+        placeholder={UI_LABELS.SEARCH_TASKS_PLACEHOLDER}
         aria-label="Search tasks"
         className="w-40 sm:w-56 focus:w-64 transition-all duration-200 text-xs rounded-lg border border-slate-200 bg-slate-50/80 pl-8 pr-7 py-1.5 text-slate-800 placeholder-slate-400 shadow-xs hover:border-slate-300 focus:border-indigo-500 focus:bg-white focus:outline-hidden focus:ring-2 focus:ring-indigo-500/20 dark:border-slate-800 dark:bg-slate-900/80 dark:text-slate-100 dark:placeholder-slate-500 dark:hover:border-slate-700 dark:focus:border-indigo-400 dark:focus:bg-slate-900"
       />

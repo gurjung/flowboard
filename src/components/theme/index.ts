@@ -1,4 +1,4 @@
-export { ThemeProvider } from './ThemeProvider';
-export { ThemeContext, THEME_STORAGE_KEY } from './ThemeContext';
-export type { ThemeMode, ThemeContextValue } from './ThemeContext';
-export { useTheme } from './useTheme';
+/**
+ * Re-exporting theme context from src/context/theme for backwards compatibility.
+ */
+export * from '@/context/theme';

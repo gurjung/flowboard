@@ -1,6 +1,7 @@
 import { Result, ok, fail } from './result';
 import { TaskPriority, User } from './types';
 import { canViewNode, PermissionState } from './permissions';
+import { LIMITS, ERROR_MESSAGES } from '@/constants';
 
 export { validateTaskDueDate } from './dateValidation';
 
@@ -24,17 +25,14 @@ const VALID_PRIORITIES = new Set<TaskPriority>([
 
 export function validateTaskTitle(title: unknown): Result<string> {
   if (typeof title !== 'string') {
-    return fail('VALIDATION', 'Task title must be a string');
+    return fail('VALIDATION', ERROR_MESSAGES.TASK_TITLE_INVALID);
   }
   const trimmed = title.trim();
   if (trimmed.length < 1) {
-    return fail('VALIDATION', 'Task title cannot be empty');
+    return fail('VALIDATION', ERROR_MESSAGES.TASK_TITLE_REQUIRED);
   }
-  if (trimmed.length > 500) {
-    return fail(
-      'VALIDATION',
-      'Task title exceeds maximum length of 500 characters'
-    );
+  if (trimmed.length > LIMITS.MAX_TASK_TITLE_LENGTH) {
+    return fail('VALIDATION', ERROR_MESSAGES.TASK_TITLE_TOO_LONG);
   }
   return ok(trimmed);
 }

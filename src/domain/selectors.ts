@@ -73,10 +73,6 @@ function getAllNodes(state: {
   };
 }
 
-// ============================================================================
-// Memoized selectVisibleContainerTree
-// ============================================================================
-
 let lastTreeNodesRef: Record<string, BaseContainer> | null = null;
 let lastTreeGrantsRef: unknown = null;
 let lastTreeUsersRef: unknown = null;
@@ -181,10 +177,6 @@ function areNodesReferenceEqual(
   return true;
 }
 
-// ============================================================================
-// Memoized selectCurrentList
-// ============================================================================
-
 let lastListNodesRef: Record<string, BaseContainer> | null = null;
 let lastListGrantsRef: unknown = null;
 let lastListUsersRef: unknown = null;
@@ -264,10 +256,6 @@ export function selectCurrentList(
   return result;
 }
 
-// ============================================================================
-// selectBreadcrumbs
-// ============================================================================
-
 let cachedBreadcrumbsResult: BreadcrumbItem[] | null = null;
 let lastBreadcrumbsNodesRef: Record<string, BaseContainer> | null = null;
 let lastBreadcrumbsGrantsRef: unknown = null;
@@ -333,10 +321,6 @@ export function selectBreadcrumbs(
   return result;
 }
 
-// ============================================================================
-// selectArchivedRoots
-// ============================================================================
-
 /**
  * Lists archived nodes whose ancestors are all active.
  * Used by admin "Archived" section to present clean restore roots without clutter.
@@ -386,10 +370,6 @@ export function selectArchivedRoots(
 
   return sortPositionables(result);
 }
-
-// ============================================================================
-// getDescendantCounts for Archive Confirmation Dialog
-// ============================================================================
 
 /**
  * Returns count of active descendant containers AND active tasks that will be hidden

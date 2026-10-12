@@ -1,9 +1,8 @@
-import { Sidebar } from '@/components/sidebar';
+import { Sidebar } from '@/features/sidebar';
 import { MainArea } from '@/features/main-area';
 import { TopBar } from '@/features/topbar';
 import { ToastProvider, ToastContainer } from '@/components/toasts';
-import { ThemeProvider } from '@/components/theme';
-import { SidebarProvider } from '@/components/layout';
+import { ThemeProvider, SidebarProvider } from '@/context';
 
 export default function App() {
   return (
