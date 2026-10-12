@@ -13,8 +13,8 @@ A modern, high-performance project management web application built with **React
 5. [Trade-Offs & Week 2 Roadmap](#5-trade-offs--week-2-roadmap)
 6. [AI Usage Log & Engineering Judgment](#6-ai-usage-log--engineering-judgment)
 7. [DnD Inline Style Exception Documentation](#7-dnd-inline-style-exception-documentation)
-8. [Recruiter Guidelines Alignment & Checklist](#8-recruiter-guidelines-alignment--checklist)
-9. [Stretch Goals Implemented](#9-stretch-goals-implemented)
+8. [Stretch Goals Implemented](#8-stretch-goals-implemented)
+9. [Code Quality & Verification Summary](#9-code-quality--verification-summary)
 
 ---
 
@@ -60,7 +60,12 @@ Flowboard strictly follows the **Model-View-Controller (MVC)** architectural pat
 - **Controller (Zustand Store Actions)**: Central mutation actions (`src/store/slices/`) that enforce permission checks, execute business validations, update the normalized state, and handle rollbacks.
 - **View (React UI Layer)**: Accessible, presentation-only components (`src/features/`, `src/components/`) that subscribe to fine-grained selectors and dispatch controller actions.
 
-### Architecture Diagram (Mermaid)
+### Architecture Diagram
+
+![Flowboard MVC Architecture Diagram](./docs/architecture-diagram.png)
+
+<details>
+<summary>Click to view Mermaid diagram source code</summary>
 
 ```mermaid
 flowchart TD
@@ -103,6 +108,31 @@ flowchart TD
     ContainerSlice -.->|Filtered Containers| Sidebar
     TaskSlice -.->|Visible & Sorted Tasks| KanbanView
     TaskSlice -.->|Visible & Sorted Tasks| ListView
+```
+
+</details>
+
+### Project Directory Layout
+
+```text
+src/
+├── constants/            # Centralized config, storage keys, enums, UI messages, color tokens
+├── context/              # Context providers (SidebarProvider, ThemeProvider)
+├── domain/               # Pure domain models, validation, permissions, ordering engines
+│   └── __tests__/        # Colocated domain unit tests
+├── features/             # Feature presentation modules (View layer)
+│   ├── kanban/           # Drag-and-drop board, columns, cards, droppables
+│   ├── list/             # Sortable table view, rows, headers
+│   ├── sidebar/          # Hierarchy tree navigation, roving focus, inline creator
+│   ├── task-drawer/      # Accessible task detail/edit modal, draft form
+│   ├── toolbar/          # Search bar, view mode switchers, action triggers
+│   └── topbar/           # Navigation bar, user switcher, failure simulation toggle
+├── hooks/                # Reusable UI hooks (useClickOutside, useKeyboardShortcut)
+├── store/                # Zustand controllers, normalized state slices, selectors
+│   ├── slices/           # Container, Task, Status, Session controllers
+│   ├── selectors/        # Fine-grained derived state selectors
+│   └── __tests__/        # Colocated store integration tests
+└── types/                # Modular domain, container, task, status, user type definitions
 ```
 
 ---
@@ -226,35 +256,25 @@ Per assignment constraints:
 - **File**: [`src/features/kanban/SortableTaskCard.tsx`](./src/features/kanban/SortableTaskCard.tsx#L46)
 - **Code**:
   ```tsx
-  const style = {
-    transform: CSS.Transform.toString(transform),
+  const dndTransformStyle = {
+    transform: CSS.Translate.toString(transform),
     transition,
   };
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={dndTransformStyle}
+      {...(canEdit ? attributes : {})}
+      {...(canEdit ? listeners : {})}
+      className={isDragging ? 'opacity-40' : undefined}
+    >
   ```
-- **Rationale**: `@dnd-kit` requires direct matrix transforms applied to the draggable element's DOM node during pointer dragging. No other inline `style=` attributes exist across the entire application.
+- **Rationale**: `@dnd-kit` requires direct matrix/pointer translation applied dynamically to the draggable element's DOM node during pointer dragging. No other inline `style=` attributes exist across the entire application; all layout, theming, spacing, and typography use Tailwind CSS utility classes exclusively.
 
 ---
 
-## 8. Recruiter Guidelines Alignment & Checklist
-
-All 10 personal recruiter guidelines have been fully implemented and audited:
-
-| #      | Recruiter Guideline              | Implementation Details                                                                                                                                       |
-| ------ | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **1**  | **UI Feedbacks**                 | Loading skeletons, empty states for lists/columns, toast alerts on all actions, inline field error validation messages.                                      |
-| **2**  | **Standard Icons**               | Standard `lucide-react` icons utilized consistently across navigation, priority badges, actions, and theme controls.                                         |
-| **3**  | **Consistent Spacing & Padding** | Strict 4px/8px Tailwind spacing scale applied across layouts, modal dialogs, and table rows.                                                                 |
-| **4**  | **Neat Design**                  | Refined typography, crisp borders, dark/light theme toggle, zero flash-of-wrong-theme (FOWT), and WCAG AA contrast compliance.                               |
-| **5**  | **MVC Pattern**                  | Clear separation between Domain Models (`src/domain/`), Zustand Controllers (`src/store/slices/`), and React Views (`src/features/`).                        |
-| **6**  | **Card Interactions**            | Tactile desktop hover lift (`hover:-translate-y-0.5 hover:shadow-md transition-all duration-150`), priority badges, and drag preview opacity.                |
-| **7**  | **Simulate Failures**            | Dedicated toggle in TopBar. When active, all async mutations reject with simulated HTTP 500 network errors, triggering optimistic rollback and error toasts. |
-| **8**  | **Task Drawer / Modal**          | Headless UI accessible dialog, draft validation form, past-date prevention, keyboard Escape dismissal, and clean focus restoration.                          |
-| **9**  | **Good UX**                      | Keyboard shortcut (`/` to search, `Escape` to clear), instantaneous client filtering, roving tabindex keyboard navigation across tree nodes.                 |
-| **10** | **UI Space Optimization**        | Collapsible sidebar with mobile slide-over drawer, dense table row layout option, and horizontal scroll containment on Kanban boards.                        |
-
----
-
-## 9. Stretch Goals Implemented
+## 8. Stretch Goals Implemented
 
 ### 1. Real-Time Client-Side Search
 
@@ -267,7 +287,7 @@ All 10 personal recruiter guidelines have been fully implemented and audited:
 
 ### 2. Network Failure Simulation & Rollback Mode
 
-- **Functionality**: TopBar toggle button allowing candidates and reviewers to test failure resilience.
+- **Functionality**: TopBar toggle button allowing evaluators to test failure resilience.
 - **Affordances**:
   - Simulates HTTP 500 network partition failures on task creation, status movement, reordering, updates, and deletion.
   - Automatically triggers UI rollback and shows descriptive error toast notifications (`"Simulated network failure (HTTP 500)..."`).
@@ -275,9 +295,9 @@ All 10 personal recruiter guidelines have been fully implemented and audited:
 
 ---
 
-## 10. Code Quality & Verification Summary
+## 9. Code Quality & Verification Summary
 
-- **Test Suite**: 35 test files, 336 tests passing (100% green).
+- **Test Suite**: 35 test files, 336 tests passing (100% green coverage across domain, store, and UI components).
 - **TypeScript**: Strict typechecking with 0 errors (`tsc --noEmit`).
 - **ESLint**: 0 warnings, 0 errors.
 - **File Discipline**: Every single source file strictly $\le 200$ lines.

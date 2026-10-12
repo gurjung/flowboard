@@ -4,7 +4,7 @@ import App from '@/App';
 import { useFlowboardStore } from '@/store/useFlowboardStore';
 import { createSeedState } from '@/domain/fixtures';
 
-describe('Simulated Failure Mode (Recruiter Guidelines & Resilience)', () => {
+describe('Simulated Failure Mode (Resilience & Error Handling)', () => {
   beforeEach(() => {
     useFlowboardStore.setState({
       ...createSeedState(),

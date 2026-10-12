@@ -22,15 +22,3 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-
-# Study notes (strictly internal, excluded from submission)
-/study-notes
-study-notes/
-
-# Internal decision logging & project understanding (kept local, excluded from git)
-/docs/DECISIONS_LOG.md
-docs/DECISIONS_LOG.md
-/docs/project-understanding
-docs/project-understanding/
-/docs/ROADMAP.md
-docs/ROADMAP.md
