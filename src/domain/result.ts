@@ -4,7 +4,8 @@ export type ErrorCode =
   | 'VALIDATION'
   | 'INVALID_PARENT'
   | 'INVALID_STATUS'
-  | 'CONFLICT';
+  | 'CONFLICT'
+  | 'INTERNAL';
 
 export interface DomainError {
   code: ErrorCode;

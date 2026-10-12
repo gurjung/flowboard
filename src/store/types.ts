@@ -31,6 +31,8 @@ export interface CreateContainerInput {
 export interface SessionSlice {
   currentUserId: string;
   selectedListId: string | null;
+  simulateFailure: boolean;
+  setSimulateFailure: (enabled: boolean) => void;
   setCurrentUser: (userId: string) => Result<User>;
   setSelectedList: (listId: string | null) => Result<void>;
   selectList: (listId: string) => Result<List>;

@@ -10,7 +10,7 @@ export const ToastContainer: React.FC = () => {
       aria-live="polite"
       aria-atomic="false"
       data-testid="toast-container"
-      className="pointer-events-none fixed bottom-4 right-4 z-50 flex w-full max-w-sm flex-col gap-2 p-2"
+      className="pointer-events-none fixed bottom-4 right-4 z-[100] flex w-full max-w-sm flex-col gap-2 p-2"
     >
       {toasts.map((toast) => (
         <ToastItem key={toast.id} toast={toast} />

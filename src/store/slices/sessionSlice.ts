@@ -24,6 +24,11 @@ export const createSessionSlice = (
 ): SessionSlice => ({
   currentUserId: 'user-alice',
   selectedListId: 'list-1',
+  simulateFailure: false,
+
+  setSimulateFailure: (enabled: boolean) => {
+    set(() => ({ simulateFailure: enabled }));
+  },
 
   setCurrentUser: (userId: string) => {
     const state = get();

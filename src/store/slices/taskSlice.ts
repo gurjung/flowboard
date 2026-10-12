@@ -8,7 +8,7 @@ import {
   GetStoreState,
 } from '../types';
 import { Task } from '@/domain/types';
-import { Result } from '@/domain/result';
+import { Result, fail } from '@/domain/result';
 import { executeCreateTask, executeUpdateTask } from './taskOperations';
 import {
   executeChangeTaskStatus,
@@ -61,6 +61,13 @@ export function createTaskSlice(
 
   const asyncSlice: TaskAsyncSlice = {
     createTask: async (input: CreateTaskInput): Promise<Result<Task>> => {
+      if (get().simulateFailure) {
+        if (latency > 0) await sleep(latency);
+        return fail(
+          'INTERNAL',
+          'Simulated network failure (HTTP 500): Server temporarily unavailable'
+        );
+      }
       const res = syncSlice.createTaskSync(input);
       if (latency > 0) await sleep(latency);
       return res;
@@ -70,6 +77,13 @@ export function createTaskSlice(
       id: string,
       patch: UpdateTaskPatch
     ): Promise<Result<Task>> => {
+      if (get().simulateFailure) {
+        if (latency > 0) await sleep(latency);
+        return fail(
+          'INTERNAL',
+          'Simulated network failure (HTTP 500): Failed to update task'
+        );
+      }
       const res = syncSlice.updateTaskSync(id, patch);
       if (latency > 0) await sleep(latency);
       return res;
@@ -80,6 +94,13 @@ export function createTaskSlice(
       statusId: string,
       index?: number
     ): Promise<Result<Task>> => {
+      if (get().simulateFailure) {
+        if (latency > 0) await sleep(latency);
+        return fail(
+          'INTERNAL',
+          'Simulated network failure (HTTP 500): Failed to change status. Rolling back.'
+        );
+      }
       const res = syncSlice.changeTaskStatusSync(id, statusId, index);
       if (latency > 0) await sleep(latency);
       return res;
@@ -89,6 +110,13 @@ export function createTaskSlice(
       id: string,
       newIndex: number
     ): Promise<Result<Task>> => {
+      if (get().simulateFailure) {
+        if (latency > 0) await sleep(latency);
+        return fail(
+          'INTERNAL',
+          'Simulated network failure (HTTP 500): Failed to reorder task'
+        );
+      }
       const res = syncSlice.reorderTaskSync(id, newIndex);
       if (latency > 0) await sleep(latency);
       return res;
@@ -98,12 +126,26 @@ export function createTaskSlice(
       id: string,
       targetListId: string
     ): Promise<Result<Task>> => {
+      if (get().simulateFailure) {
+        if (latency > 0) await sleep(latency);
+        return fail(
+          'INTERNAL',
+          'Simulated network failure (HTTP 500): Failed to move task to list'
+        );
+      }
       const res = syncSlice.moveTaskToListSync(id, targetListId);
       if (latency > 0) await sleep(latency);
       return res;
     },
 
     deleteTask: async (id: string): Promise<Result<void>> => {
+      if (get().simulateFailure) {
+        if (latency > 0) await sleep(latency);
+        return fail(
+          'INTERNAL',
+          'Simulated network failure (HTTP 500): Failed to delete task'
+        );
+      }
       const res = syncSlice.deleteTaskSync(id);
       if (latency > 0) await sleep(latency);
       return res;

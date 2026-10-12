@@ -52,10 +52,10 @@ export const TaskCard: React.FC<TaskCardProps> = ({
       onPointerDown={handlePointerDown}
       onClick={handleClick}
       onKeyDown={handleKeyDown}
-      className={`group relative rounded-card border bg-white p-3.5 shadow-card transition-all dark:bg-slate-800/90 ${
+      className={`group relative rounded-card border bg-white p-3.5 shadow-card transition-all duration-150 dark:bg-slate-800/90 ${
         isDragging
           ? 'rotate-1 border-brand-500 shadow-xl opacity-90'
-          : 'border-slate-200 hover:border-slate-300 hover:shadow-subtle dark:border-slate-700/80 dark:hover:border-slate-600'
+          : 'border-slate-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md dark:border-slate-700/80 dark:hover:border-slate-600 dark:hover:shadow-black/40'
       } ${
         canEdit ? 'cursor-grab active:cursor-grabbing' : 'cursor-default'
       } focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 dark:focus-visible:ring-brand-400`}

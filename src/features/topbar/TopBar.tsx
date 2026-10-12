@@ -2,6 +2,7 @@ import React from 'react';
 import { Breadcrumbs } from './Breadcrumbs';
 import { UserSwitcher } from './UserSwitcher';
 import { ThemeSelector } from './ThemeSelector';
+import { SimulateFailureToggle } from './SimulateFailureToggle';
 import { useSidebar } from '@/components/layout';
 import { PanelLeft } from 'lucide-react';
 
@@ -36,7 +37,8 @@ export const TopBar: React.FC = () => {
         </button>
         <Breadcrumbs />
       </div>
-      <div className="flex shrink-0 items-center gap-3">
+      <div className="flex shrink-0 items-center gap-2 sm:gap-3">
+        <SimulateFailureToggle />
         <ThemeSelector />
         <UserSwitcher />
       </div>
