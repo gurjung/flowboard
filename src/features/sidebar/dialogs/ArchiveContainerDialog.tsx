@@ -71,12 +71,12 @@ export const ArchiveConfirmDialog: React.FC<ArchiveConfirmProps> = ({
       errorMsg={errorMsg}
     >
       <div className="space-y-3">
-        <p className="text-xs text-slate-600">
+        <p className="text-xs text-slate-600 dark:text-slate-300">
           Are you sure you want to archive <strong>{node.name}</strong>?
         </p>
 
         <div
-          className="rounded border border-amber-200 bg-amber-50 p-3 text-xs text-amber-800"
+          className="rounded border border-amber-200 bg-amber-50 p-3 text-xs text-amber-800 dark:border-amber-900/60 dark:bg-amber-950/40 dark:text-amber-300"
           data-testid="archive-descendant-warning"
         >
           <p className="font-medium">Impact of archiving:</p>
@@ -96,7 +96,7 @@ export const ArchiveConfirmDialog: React.FC<ArchiveConfirmProps> = ({
           <button
             type="button"
             onClick={onClose}
-            className="rounded border border-slate-300 px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-50"
+            className="rounded border border-slate-300 px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-50 transition-colors dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
           >
             Cancel
           </button>
@@ -105,7 +105,7 @@ export const ArchiveConfirmDialog: React.FC<ArchiveConfirmProps> = ({
             disabled={isSubmitting}
             onClick={handleConfirm}
             data-testid="archive-confirm-btn"
-            className="rounded bg-rose-600 px-3 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-rose-700 disabled:opacity-50"
+            className="rounded bg-rose-600 px-3 py-1.5 text-xs font-medium text-white shadow-xs hover:bg-rose-700 disabled:opacity-50 transition-colors dark:bg-rose-600 dark:hover:bg-rose-700"
           >
             {isSubmitting ? 'Archiving...' : 'Archive Container'}
           </button>

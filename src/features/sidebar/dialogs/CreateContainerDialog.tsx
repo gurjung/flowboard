@@ -85,7 +85,7 @@ export const CreateContainerDialog: React.FC<CreateModalProps> = ({
         <div>
           <label
             htmlFor="container-name"
-            className="block text-xs font-medium text-slate-700"
+            className="block text-xs font-medium text-slate-700 dark:text-slate-300"
           >
             Name
           </label>
@@ -98,14 +98,14 @@ export const CreateContainerDialog: React.FC<CreateModalProps> = ({
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder={`e.g. ${childType === 'list' ? 'Sprint Backlog' : 'Engineering'}`}
-            className="mt-1 w-full rounded border border-slate-300 px-3 py-1.5 text-xs text-slate-800 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+            className="mt-1 w-full rounded border border-slate-300 bg-white px-3 py-1.5 text-xs text-slate-800 placeholder-slate-400 shadow-xs focus:border-indigo-500 focus:outline-hidden focus:ring-1 focus:ring-indigo-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500 dark:focus:border-indigo-400"
           />
         </div>
 
         <div>
           <label
             htmlFor="container-visibility"
-            className="block text-xs font-medium text-slate-700"
+            className="block text-xs font-medium text-slate-700 dark:text-slate-300"
           >
             Visibility
           </label>
@@ -115,18 +115,26 @@ export const CreateContainerDialog: React.FC<CreateModalProps> = ({
               data-testid="create-visibility-select"
               value={visibility}
               onChange={(e) => setVisibility(e.target.value as Visibility)}
-              className="w-full appearance-none rounded border border-slate-300 bg-white px-3 py-1.5 pr-8 text-xs text-slate-800 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+              className="w-full appearance-none rounded border border-slate-300 bg-white px-3 py-1.5 pr-8 text-xs text-slate-800 shadow-xs focus:border-indigo-500 focus:outline-hidden focus:ring-1 focus:ring-indigo-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:focus:border-indigo-400"
             >
-              <option value="public">Public (Inherited team access)</option>
-              <option value="private">
+              <option
+                value="public"
+                className="dark:bg-slate-800 dark:text-slate-100"
+              >
+                Public (Inherited team access)
+              </option>
+              <option
+                value="private"
+                className="dark:bg-slate-800 dark:text-slate-100"
+              >
                 Private (Restricted access barrier)
               </option>
             </select>
-            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2.5 text-slate-400">
+            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2.5 text-slate-400 dark:text-slate-400">
               {visibility === 'private' ? (
-                <Lock className="h-3.5 w-3.5 text-amber-600" />
+                <Lock className="h-3.5 w-3.5 text-amber-600 dark:text-amber-400" />
               ) : (
-                <Globe className="h-3.5 w-3.5 text-slate-500" />
+                <Globe className="h-3.5 w-3.5 text-slate-500 dark:text-slate-400" />
               )}
             </div>
           </div>
@@ -136,7 +144,7 @@ export const CreateContainerDialog: React.FC<CreateModalProps> = ({
           <button
             type="button"
             onClick={onClose}
-            className="rounded border border-slate-300 px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-50"
+            className="rounded border border-slate-300 px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-50 transition-colors dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
           >
             Cancel
           </button>
@@ -144,7 +152,7 @@ export const CreateContainerDialog: React.FC<CreateModalProps> = ({
             type="submit"
             disabled={isSubmitting}
             data-testid="create-submit-btn"
-            className="rounded bg-indigo-600 px-3 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-indigo-700 disabled:opacity-50"
+            className="rounded bg-indigo-600 px-3 py-1.5 text-xs font-medium text-white shadow-xs hover:bg-indigo-700 disabled:opacity-50 transition-colors dark:bg-indigo-600 dark:hover:bg-indigo-500"
           >
             {isSubmitting ? 'Creating...' : `Create ${childType}`}
           </button>
